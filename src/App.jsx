@@ -3,6 +3,7 @@ import Separator from './components/Separator';
 import Hero from './components/Hero';
 import About from './components/About';
 import SkillStack from './components/SkillStack';
+import Sponsorship from './components/Sponsorship';
 
 function App() {
   return (
@@ -34,6 +35,18 @@ function App() {
         </div>
 
         <SkillStack />
+
+        <div className="separator-full-width">
+          <Separator />
+        </div>
+
+        {/* SPONSORS divider */}
+        <div className="section-separator">
+          <span className="section-label">SPONSORS</span>
+          <div className="section-line"></div>
+        </div>
+
+        <Sponsorship />
 
         <div className="separator-full-width">
           <Separator />

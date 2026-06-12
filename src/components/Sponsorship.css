@@ -1,0 +1,205 @@
+.sponsorship-section {
+  padding: 40px 32px 60px;
+}
+
+.sponsorship-flex-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 48px;
+  background-color: transparent;
+}
+
+.sponsorship-media-block {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+}
+
+.sponsorship-image-group {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0;
+  width: fit-content;
+  position: relative;
+}
+
+.sponsor-profile-wrapper {
+  position: relative;
+  width: 180px;
+  height: 180px;
+  flex-shrink: 0;
+}
+
+.sponsor-profile-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 12px;
+  border: 1px solid var(--border-color);
+}
+
+.sponsor-neetcode-logo {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translate(-50%, 50%);
+  width: 88px;
+  height: 88px;
+  border-radius: 50%;
+  border: 3px solid var(--bg-color);
+  background-color: var(--bg-color);
+  object-fit: cover;
+  z-index: 5;
+}
+
+.sponsor-view-btn {
+  height: 120px;
+  width: 38px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background-color: transparent;
+  border: 1px solid var(--border-color);
+  border-left: none;
+  border-top-right-radius: 8px;
+  border-bottom-right-radius: 8px;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease;
+  margin-left: -1px;
+  color: var(--text-color);
+  flex-shrink: 0;
+}
+
+.view-text {
+  writing-mode: vertical-rl;
+  text-orientation: upright;
+  font-weight: 800;
+  font-size: 0.8rem;
+  letter-spacing: 0.1em;
+}
+
+.view-icon {
+  flex-shrink: 0;
+}
+
+.sponsor-view-btn:hover {
+  background-color: var(--text-color);
+  color: var(--bg-color);
+}
+
+.sponsorship-info-block {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  flex: 1;
+}
+
+.sponsor-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 8px;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.sponsor-name {
+  font-size: 2rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--text-color);
+}
+
+.sponsor-amount {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #10b981;
+  letter-spacing: -0.02em;
+}
+
+.sponsor-title-line {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--text-color);
+}
+
+.sponsor-role {
+  opacity: 0.8;
+}
+
+.sponsor-org-link {
+  font-weight: 700;
+  color: var(--text-color);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.sponsor-org-link:hover {
+  text-decoration: underline;
+}
+
+.sponsor-visit-icon {
+  opacity: 0.8;
+}
+
+.sponsor-socials {
+  display: flex;
+  gap: 16px;
+  margin-top: 20px;
+}
+
+.sponsor-social-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+  opacity: 0.8;
+}
+
+.sponsor-social-link:hover {
+  transform: translateY(-2px);
+  opacity: 1;
+}
+
+.sponsor-social-img {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .sponsorship-section {
+    padding: 30px 16px 40px;
+  }
+
+  .sponsorship-flex-container {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 32px;
+  }
+
+  .sponsorship-info-block {
+    align-items: center;
+  }
+
+  .sponsor-title-line {
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .sponsor-socials {
+    justify-content: center;
+  }
+}
