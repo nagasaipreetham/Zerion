@@ -15,19 +15,17 @@ export default function Sponsorship() {
         
         {/* Left Column: Welded Media Block */}
         <div className="sponsorship-media-block">
-          <div className="sponsorship-image-group">
-            <div className="sponsor-profile-wrapper">
-              <img 
-                src="/navdeep profile.jpg" 
-                alt="Navdeep Singh" 
-                className="sponsor-profile-img" 
-              />
-              <img 
-                src="/neetcodelogo.jpg" 
-                alt="NeetCode Logo" 
-                className="sponsor-neetcode-logo" 
-              />
-            </div>
+          <div className="sponsor-profile-wrapper">
+            <img 
+              src="/navdeep profile.jpg" 
+              alt="Navdeep Singh" 
+              className="sponsor-profile-img" 
+            />
+            <img 
+              src="/neetcodelogo.jpg" 
+              alt="NeetCode Logo" 
+              className="sponsor-neetcode-logo" 
+            />
             
             <a 
               href="https://github.com/neetcode-gh?tab=sponsoring" 
@@ -47,8 +45,8 @@ export default function Sponsorship() {
         {/* Right Column: Text & Social Details */}
         <div className="sponsorship-info-block">
           <div className="sponsor-header">
-            <h2 className="sponsor-name">Navdeep Singh</h2>
             <span className="sponsor-amount">$250</span>
+            <h2 className="sponsor-name">Navdeep Singh</h2>
           </div>
           
           <div className="sponsor-title-line">

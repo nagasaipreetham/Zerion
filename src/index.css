@@ -46,6 +46,15 @@ body {
     linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
   background-size: 150px 150px;
   background-position: center top;
+
+  /* Hide scrollbar for IE and Firefox */
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+body::-webkit-scrollbar {
+  display: none;
 }
 
 /* View Transitions for Theme Toggle */
