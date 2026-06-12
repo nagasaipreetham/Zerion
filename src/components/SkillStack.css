@@ -32,6 +32,19 @@
   object-fit: contain;
 }
 
+.skill-logo-mask {
+  width: 35px;
+  height: 35px;
+  background-color: #000000;
+  -webkit-mask: var(--svg-url) no-repeat center / contain;
+  mask: var(--svg-url) no-repeat center / contain;
+  transition: background-color 0.2s ease;
+}
+
+.dark .skill-logo-mask {
+  background-color: #ffffff;
+}
+
 /* Styled custom tooltip on top */
 .skill-item::before {
   content: attr(data-tooltip);
@@ -89,7 +102,7 @@
   .skill-item {
     padding: 8px;
   }
-  .skill-logo-img {
+  .skill-logo-img, .skill-logo-mask {
     width: 32px;
     height: 32px;
   }

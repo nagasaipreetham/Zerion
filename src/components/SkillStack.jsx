@@ -27,15 +27,25 @@ export default function SkillStack() {
   return (
     <section className="skills-section">
       <div className="skills-list">
-        {SKILLS.map((skill) => (
-          <div key={skill.name} className="skill-item" data-tooltip={skill.name}>
-            <img 
-              src={`/skillslogo/${skill.file}`} 
-              alt={skill.name} 
-              className="skill-logo-img" 
-            />
-          </div>
-        ))}
+        {SKILLS.map((skill) => {
+          const isMonochrome = ['rest-api-icon.svg', 'express.svg', 'github.svg'].includes(skill.file);
+          return (
+            <div key={skill.name} className="skill-item" data-tooltip={skill.name}>
+              {isMonochrome ? (
+                <div 
+                  className="skill-logo-mask" 
+                  style={{ '--svg-url': `url(/skillslogo/${skill.file})` }}
+                />
+              ) : (
+                <img 
+                  src={`/skillslogo/${skill.file}`} 
+                  alt={skill.name} 
+                  className="skill-logo-img" 
+                />
+              )}
+            </div>
+          );
+        })}
       </div>
     </section>
   );
