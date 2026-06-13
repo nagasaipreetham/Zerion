@@ -1,6 +1,6 @@
 /* ═══════════════════════════════════════════════════════════
-   PRE UI — Placeholder section below the Works experience
-═══════════════════════════════════════════════════════════ */
+   PRE UI — 3D Construction section layout
+   ═══════════════════════════════════════════════════════════ */
 
 .preui-section {
   width: 100%;
@@ -8,46 +8,98 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 100px 32px;
+  padding: 20px 20px;
   position: relative;
 }
 
-.preui-inner {
+.preui-flex-container {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  gap: 40px;
+}
+
+.preui-left {
+  flex: 1;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 14px;
-  text-align: center;
-  user-select: none;
+  align-items: flex-start;
+  gap: 6px;
+  padding-left: 10px;
 }
 
-.preui-badge {
-  display: inline-block;
-  font-size: 0.6rem;
-  font-weight: 700;
-  letter-spacing: 0.24em;
-  text-transform: uppercase;
+.preui-main-title {
+  font-family: "Space Grotesk", sans-serif;
+  font-size: clamp(2.5rem, 6vw, 4.5rem);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 1.1;
   color: var(--text-color);
-  opacity: 0.3;
-  padding: 5px 14px;
-  border: 1px solid currentColor;
-  border-radius: 100px;
-}
-
-.preui-heading {
-  font-size: clamp(4rem, 12vw, 10rem);
-  font-weight: 900;
-  letter-spacing: -0.05em;
-  line-height: 1;
   margin: 0;
-  color: var(--text-color);
-  opacity: 0.06;
 }
 
-.preui-sub {
-  font-size: 0.78rem;
-  color: var(--text-color);
-  opacity: 0.25;
+.preui-sub-title {
+  font-size: clamp(1rem, 2vw, 1.25rem);
+  font-weight: 500;
   letter-spacing: 0.04em;
+  color: var(--text-color);
   margin: 0;
+}
+
+.preui-right {
+  flex: 3;
+  padding: 20px; /* Keep only 20px of margin/padding to the model */
+  position: relative;
+}
+
+.preui-3d-scene {
+  height: 400px;
+}
+
+.preui-placeholder {
+  min-height: 440px;
+  width: 100%;
+}
+
+
+.preui-desc {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: var(--text-color);
+  opacity: 0.65; /* Dim color */
+  margin-top: 24px; /* Gap below Under Construction */
+  max-width: 500px;
+}
+
+/* Responsive layout stacking */
+@media (max-width: 768px) {
+  .preui-flex-container {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 30px;
+  }
+  
+  .preui-left {
+    padding-left: 0;
+    align-items: center;
+    text-align: center;
+  }
+  
+  .preui-right {
+    padding: 10px;
+  }
+  
+  .preui-3d-scene {
+    height: 260px; /* Reduced height of 3D model component in mobile view */
+  }
+  
+  .preui-placeholder {
+    min-height: 520px;
+  }
+  
+  .preui-desc {
+    margin-top: 20px;
+    margin-left: auto;
+    margin-right: auto;
+  }
 }
