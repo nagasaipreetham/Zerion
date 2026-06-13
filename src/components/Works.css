@@ -1,0 +1,412 @@
+/* ═══════════════════════════════════════════════════════════════
+   WORKS / PROJECTS SECTION
+   Full-viewport cinematic experience — sits outside layout-container
+═══════════════════════════════════════════════════════════════ */
+
+.works-section {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  background: #050505;
+  font-family: 'Space Grotesk', sans-serif;
+}
+
+/* ── Curtains ──────────────────────────────────────────────── */
+
+.curtain {
+  position: absolute;
+  width: 100%;
+  z-index: 20;
+  overflow: hidden;
+  /* Automatically follows the site's light / dark theme */
+  background-color: var(--bg-color);
+  will-change: transform;
+}
+
+.curtain-top {
+  top: 0;
+  height: 50%;
+  display: flex;
+  align-items: flex-end;   /* text sits at the seam (bottom edge) */
+  justify-content: center;
+}
+
+.curtain-bottom {
+  bottom: 0;
+  height: 50%;
+  display: flex;
+  align-items: flex-start; /* text sits at the seam (top edge) */
+  justify-content: center;
+}
+
+/* ── Giant Split Title ─────────────────────────────────────── */
+
+.works-title {
+  font-size: clamp(8rem, 20vw, 20rem);
+  font-weight: 900;
+  letter-spacing: -0.05em;
+  line-height: 1;
+  white-space: nowrap;
+  user-select: none;
+  pointer-events: none;
+  /* Text colour follows site theme (black in light, white in dark) */
+  color: var(--text-color);
+}
+
+/*
+ * Centering trick:
+ *   Top curtain   — push text DOWN by half its own height so its
+ *                   visual centre sits exactly at the curtain seam.
+ *                   overflow:hidden clips the lower half → top half visible.
+ *
+ *   Bottom curtain — push text UP by half its own height so its
+ *                   visual centre sits at the top seam.
+ *                   overflow:hidden clips the upper half → bottom half visible.
+ *
+ * Together they create the illusion of one giant word sliced in two.
+ */
+.curtain-top .works-title {
+  transform: translateY(50%);
+}
+
+.curtain-bottom .works-title {
+  transform: translateY(-50%);
+}
+
+/* ── Gallery Container ─────────────────────────────────────── */
+
+.gallery-container {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+
+/* Section label — top-left corner of the gallery */
+.gallery-meta {
+  position: absolute;
+  top: 28px;
+  left: 48px;
+  z-index: 12;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  pointer-events: none;
+}
+
+.gallery-label {
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.28);
+}
+
+.gallery-count {
+  font-size: 0.62rem;
+  letter-spacing: 0.14em;
+  color: rgba(255, 255, 255, 0.16);
+}
+
+/* ── Gallery Track ─────────────────────────────────────────── */
+
+.gallery-track {
+  display: flex;
+  align-items: center;
+  gap: 3rem;
+  width: max-content;
+  height: 100%;
+  will-change: transform;
+  /* GPU-composited layer for smooth movement */
+  transform: translate3d(0, 0, 0);
+}
+
+/* Leading and trailing spacers */
+.gallery-pad {
+  width: 5vw;
+  flex-shrink: 0;
+}
+
+/* ── Project Card ──────────────────────────────────────────── */
+
+.project-card {
+  width: 380px;
+  height: 540px;
+  flex-shrink: 0;
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  background: rgba(255, 255, 255, 0.02);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  cursor: pointer;
+  transition:
+    border-color 0.4s ease,
+    transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+    box-shadow 0.4s ease;
+}
+
+.project-card:hover {
+  border-color: rgba(255, 255, 255, 0.13);
+  transform: translateY(-10px);
+  box-shadow:
+    0 24px 64px rgba(0, 0, 0, 0.55),
+    0 0 0 1px rgba(255, 255, 255, 0.06);
+}
+
+/* Card Visual — abstract gradient area */
+.card-visual {
+  height: 220px;
+  flex-shrink: 0;
+  position: relative;
+  overflow: hidden;
+  background: hsl(var(--card-hue), 45%, 5%);
+}
+
+/* Soft centred glow using the card accent colour */
+.card-glow {
+  position: absolute;
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(
+    circle,
+    hsla(var(--card-hue), 85%, 62%, 0.22) 0%,
+    hsla(var(--card-hue), 85%, 62%, 0.06) 45%,
+    transparent 70%
+  );
+  pointer-events: none;
+  transition: opacity 0.4s ease;
+}
+
+.project-card:hover .card-glow {
+  opacity: 1.4;
+}
+
+/* Subtle dot grid overlay on the visual area */
+.card-grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
+  background-size: 26px 26px;
+  pointer-events: none;
+}
+
+/* Large faint project number watermark */
+.card-bg-number {
+  position: absolute;
+  bottom: -24px;
+  right: 10px;
+  font-size: 7.5rem;
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: -0.05em;
+  color: rgba(255, 255, 255, 0.04);
+  user-select: none;
+  pointer-events: none;
+}
+
+/* Card Body */
+.card-body {
+  flex: 1;
+  padding: 22px 24px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.card-id {
+  font-size: 0.63rem;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  color: rgba(255, 255, 255, 0.22);
+  font-family: 'Courier New', Courier, monospace;
+}
+
+.card-year {
+  font-size: 0.63rem;
+  letter-spacing: 0.1em;
+  color: rgba(255, 255, 255, 0.18);
+}
+
+.card-text {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.card-name {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+  margin: 0;
+}
+
+.card-tagline {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  /* Uses the card's accent hue */
+  color: hsla(var(--card-hue), 75%, 68%, 0.9);
+  margin: 0 0 6px;
+}
+
+.card-desc {
+  font-size: 0.82rem;
+  line-height: 1.65;
+  color: rgba(255, 255, 255, 0.4);
+  margin: 0;
+}
+
+/* Card Bottom Row */
+.card-bottom {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.card-stack {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  flex: 1;
+}
+
+.stack-pill {
+  font-size: 0.6rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  padding: 3px 10px;
+  border-radius: 100px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  color: rgba(255, 255, 255, 0.48);
+}
+
+/* Arrow CTA button */
+.card-arrow {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255, 255, 255, 0.45);
+  text-decoration: none;
+  flex-shrink: 0;
+  background: transparent;
+  transition:
+    background 0.25s ease,
+    color 0.25s ease,
+    border-color 0.25s ease,
+    transform 0.25s ease;
+}
+
+.card-arrow:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.28);
+  transform: rotate(45deg);
+}
+
+/* ── Scroll Cue ─────────────────────────────────────────────── */
+
+.scroll-cue {
+  position: absolute;
+  bottom: 28px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 12;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 7px;
+  color: rgba(255, 255, 255, 0.2);
+  animation: scrollBounce 2.4s ease-in-out infinite;
+  pointer-events: none;
+}
+
+.scroll-cue span {
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+}
+
+@keyframes scrollBounce {
+  0%, 100% { transform: translateX(-50%) translateY(0); opacity: 0.8; }
+  50%       { transform: translateX(-50%) translateY(5px); opacity: 0.4; }
+}
+
+/* ── Film Grain Overlay ─────────────────────────────────────── */
+/*
+ * A tiny SVG noise pattern tiled across the dark gallery area.
+ * z-index: 15 places it above the gallery (10) but below the curtains (20),
+ * so the curtain panels remain clean and theme-accurate.
+ */
+.works-grain {
+  position: absolute;
+  inset: 0;
+  z-index: 15;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='grain'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.72' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23grain)' opacity='0.07'/%3E%3C/svg%3E");
+  background-size: 280px 280px;
+  opacity: 0.3;
+}
+
+/* ── Responsive ─────────────────────────────────────────────── */
+
+@media (max-width: 768px) {
+  .project-card {
+    width: 300px;
+    height: 480px;
+  }
+
+  .card-visual {
+    height: 180px;
+  }
+
+  .card-name {
+    font-size: 1.45rem;
+  }
+
+  .card-desc {
+    display: none; /* hide description on very narrow cards */
+  }
+
+  .gallery-meta {
+    left: 20px;
+    top: 20px;
+  }
+
+  .gallery-pad {
+    width: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .works-title {
+    font-size: clamp(5rem, 22vw, 8rem);
+  }
+}
