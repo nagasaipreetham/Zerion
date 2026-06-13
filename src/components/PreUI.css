@@ -3,12 +3,12 @@
 ═══════════════════════════════════════════════════════════ */
 
 .preui-section {
-  min-height: 100vh;
   width: 100%;
   background-color: var(--bg-color);
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 100px 32px;
   position: relative;
 }
 

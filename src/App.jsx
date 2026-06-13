@@ -11,6 +11,7 @@ import SkillStack from './components/SkillStack';
 import Sponsorship from './components/Sponsorship';
 import Works from './components/Works';
 import PreUI from './components/PreUI';
+import Contact from './components/Contact';
 
 // Register ScrollTrigger once at module level so Works.jsx can also rely on it
 gsap.registerPlugin(ScrollTrigger);
@@ -99,6 +100,16 @@ function App() {
         </div>
         <main>
           <PreUI />
+          
+          <div className="separator-full-width">
+            <Separator />
+          </div>
+          
+          <Contact />
+          
+          <div className="separator-full-width">
+            <Separator />
+          </div>
         </main>
       </div>
     </>
