@@ -1,15 +1,22 @@
 /* ═══════════════════════════════════════════════════════════════
    WORKS / PROJECTS SECTION
    Full-viewport cinematic experience — sits outside layout-container
-═══════════════════════════════════════════════════════════════ */
+   ═══════════════════════════════════════════════════════════════ */
 
 .works-section {
   position: relative;
   width: 100%;
   height: 100vh;
   overflow: hidden;
-  background: #050505;
+  background: #ffffff; /* Light mode background */
+  color: #1a1a1a;
   font-family: 'Space Grotesk', sans-serif;
+  transition: background-color 0.5s ease, color 0.5s ease;
+}
+
+.dark .works-section {
+  background: #050505; /* Dark mode background */
+  color: #ffffff;
 }
 
 /* ── Curtains ──────────────────────────────────────────────── */
@@ -83,6 +90,7 @@
   display: flex;
   align-items: center;
   overflow: hidden;
+  background: transparent;
 }
 
 /* Section label — top-left corner of the gallery */
@@ -102,12 +110,20 @@
   font-weight: 700;
   letter-spacing: 0.22em;
   text-transform: uppercase;
+  color: rgba(0, 0, 0, 0.4);
+}
+
+.dark .gallery-label {
   color: rgba(255, 255, 255, 0.28);
 }
 
 .gallery-count {
   font-size: 0.62rem;
   letter-spacing: 0.14em;
+  color: rgba(0, 0, 0, 0.3);
+}
+
+.dark .gallery-count {
   color: rgba(255, 255, 255, 0.16);
 }
 
@@ -116,43 +132,64 @@
 .gallery-track {
   display: flex;
   align-items: center;
-  gap: 3rem;
+  gap: 6rem;
   width: max-content;
   height: 100%;
   will-change: transform;
   /* GPU-composited layer for smooth movement */
   transform: translate3d(0, 0, 0);
-}
-
-/* Leading and trailing spacers */
-.gallery-pad {
-  width: 5vw;
-  flex-shrink: 0;
+  padding-left: calc(50vw - 190px);
+  padding-right: calc(50vw - 190px);
+  box-sizing: border-box;
 }
 
 /* ── Project Card ──────────────────────────────────────────── */
 
 .project-card {
   width: 380px;
-  height: 540px;
+  height: 560px;
   flex-shrink: 0;
-  border-radius: 20px;
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  background: rgba(255, 255, 255, 0.02);
-  overflow: hidden;
   display: flex;
   flex-direction: column;
   position: relative;
   cursor: pointer;
+  justify-content: center;
+}
+
+/* Inner card wrapper to isolate hover translations from GSAP transform/scale animations */
+.project-card-inner {
+  width: 100%;
+  height: 540px;
+  border-radius: 20px;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  background: rgba(255, 255, 255, 0.65);
+  backdrop-filter: blur(10px);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  position: relative;
   transition:
     border-color 0.4s ease,
     transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94),
-    box-shadow 0.4s ease;
+    box-shadow 0.4s ease,
+    background-color 0.4s ease;
 }
 
-.project-card:hover {
-  border-color: rgba(255, 255, 255, 0.13);
+.dark .project-card-inner {
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.project-card:hover .project-card-inner {
+  border-color: rgba(0, 0, 0, 0.15);
   transform: translateY(-10px);
+  box-shadow:
+    0 24px 64px rgba(0, 0, 0, 0.1),
+    0 0 0 1px rgba(0, 0, 0, 0.04);
+}
+
+.dark .project-card:hover .project-card-inner {
+  border-color: rgba(255, 255, 255, 0.13);
   box-shadow:
     0 24px 64px rgba(0, 0, 0, 0.55),
     0 0 0 1px rgba(255, 255, 255, 0.06);
@@ -164,6 +201,11 @@
   flex-shrink: 0;
   position: relative;
   overflow: hidden;
+  background: hsl(var(--card-hue), 45%, 94%);
+  transition: background-color 0.4s ease;
+}
+
+.dark .card-visual {
   background: hsl(var(--card-hue), 45%, 5%);
 }
 
@@ -195,10 +237,16 @@
   position: absolute;
   inset: 0;
   background-image:
-    linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
+    linear-gradient(rgba(0, 0, 0, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 0, 0, 0.035) 1px, transparent 1px);
   background-size: 26px 26px;
   pointer-events: none;
+}
+
+.dark .card-grid {
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
 }
 
 /* Large faint project number watermark */
@@ -210,9 +258,13 @@
   font-weight: 900;
   line-height: 1;
   letter-spacing: -0.05em;
-  color: rgba(255, 255, 255, 0.04);
+  color: rgba(0, 0, 0, 0.03);
   user-select: none;
   pointer-events: none;
+}
+
+.dark .card-bg-number {
+  color: rgba(255, 255, 255, 0.04);
 }
 
 /* Card Body */
@@ -234,13 +286,21 @@
   font-size: 0.63rem;
   font-weight: 700;
   letter-spacing: 0.22em;
-  color: rgba(255, 255, 255, 0.22);
+  color: rgba(0, 0, 0, 0.35);
   font-family: 'Courier New', Courier, monospace;
+}
+
+.dark .card-id {
+  color: rgba(255, 255, 255, 0.22);
 }
 
 .card-year {
   font-size: 0.63rem;
   letter-spacing: 0.1em;
+  color: rgba(0, 0, 0, 0.3);
+}
+
+.dark .card-year {
   color: rgba(255, 255, 255, 0.18);
 }
 
@@ -254,10 +314,14 @@
 .card-name {
   font-size: 1.75rem;
   font-weight: 700;
-  color: #ffffff;
+  color: #1a1a1a;
   letter-spacing: -0.03em;
   line-height: 1.1;
   margin: 0;
+}
+
+.dark .card-name {
+  color: #ffffff;
 }
 
 .card-tagline {
@@ -266,15 +330,23 @@
   letter-spacing: 0.13em;
   text-transform: uppercase;
   /* Uses the card's accent hue */
-  color: hsla(var(--card-hue), 75%, 68%, 0.9);
+  color: hsla(var(--card-hue), 75%, 45%, 0.9);
   margin: 0 0 6px;
+}
+
+.dark .card-tagline {
+  color: hsla(var(--card-hue), 75%, 68%, 0.9);
 }
 
 .card-desc {
   font-size: 0.82rem;
   line-height: 1.65;
-  color: rgba(255, 255, 255, 0.4);
+  color: rgba(0, 0, 0, 0.55);
   margin: 0;
+}
+
+.dark .card-desc {
+  color: rgba(255, 255, 255, 0.4);
 }
 
 /* Card Bottom Row */
@@ -298,6 +370,12 @@
   letter-spacing: 0.05em;
   padding: 3px 10px;
   border-radius: 100px;
+  background: rgba(0, 0, 0, 0.03);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  color: rgba(0, 0, 0, 0.5);
+}
+
+.dark .stack-pill {
   background: rgba(255, 255, 255, 0.04);
   border: 1px solid rgba(255, 255, 255, 0.07);
   color: rgba(255, 255, 255, 0.48);
@@ -308,11 +386,11 @@
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(0, 0, 0, 0.1);
   display: flex;
   align-items: center;
   justify-content: center;
-  color: rgba(255, 255, 255, 0.45);
+  color: rgba(0, 0, 0, 0.5);
   text-decoration: none;
   flex-shrink: 0;
   background: transparent;
@@ -323,11 +401,22 @@
     transform 0.25s ease;
 }
 
+.dark .card-arrow {
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.45);
+}
+
 .card-arrow:hover {
+  background: rgba(0, 0, 0, 0.05);
+  color: #000000;
+  border-color: rgba(0, 0, 0, 0.3);
+  transform: rotate(45deg);
+}
+
+.dark .card-arrow:hover {
   background: rgba(255, 255, 255, 0.08);
   color: #ffffff;
   border-color: rgba(255, 255, 255, 0.28);
-  transform: rotate(45deg);
 }
 
 /* ── Scroll Cue ─────────────────────────────────────────────── */
@@ -342,9 +431,13 @@
   flex-direction: column;
   align-items: center;
   gap: 7px;
-  color: rgba(255, 255, 255, 0.2);
+  color: rgba(0, 0, 0, 0.4);
   animation: scrollBounce 2.4s ease-in-out infinite;
   pointer-events: none;
+}
+
+.dark .scroll-cue {
+  color: rgba(255, 255, 255, 0.2);
 }
 
 .scroll-cue span {
@@ -360,11 +453,6 @@
 }
 
 /* ── Film Grain Overlay ─────────────────────────────────────── */
-/*
- * A tiny SVG noise pattern tiled across the dark gallery area.
- * z-index: 15 places it above the gallery (10) but below the curtains (20),
- * so the curtain panels remain clean and theme-accurate.
- */
 .works-grain {
   position: absolute;
   inset: 0;
@@ -380,7 +468,17 @@
 @media (max-width: 768px) {
   .project-card {
     width: 300px;
+    height: 500px;
+  }
+
+  .project-card-inner {
     height: 480px;
+  }
+
+  .gallery-track {
+    gap: 3rem;
+    padding-left: calc(50vw - 150px);
+    padding-right: calc(50vw - 150px);
   }
 
   .card-visual {
@@ -399,10 +497,6 @@
     left: 20px;
     top: 20px;
   }
-
-  .gallery-pad {
-    width: 20px;
-  }
 }
 
 @media (max-width: 480px) {
@@ -410,4 +504,3 @@
     font-size: clamp(5rem, 22vw, 8rem);
   }
 }
-

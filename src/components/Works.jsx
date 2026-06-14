@@ -1,6 +1,9 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { useTheme } from '../context/ThemeContext';
+import GalaxyBackground from './GalaxyBackground';
+import SphereBackground from './SphereBackground';
 import './Works.css';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -59,6 +62,10 @@ const PROJECTS = [
 ];
 
 export default function Works() {
+  const { theme } = useTheme();
+  const isDark = theme === 'dark';
+  const [isActive, setIsActive] = useState(false);
+
   const sectionRef          = useRef(null);
   const curtainTopRef       = useRef(null);   // used for BOTH open AND close
   const curtainBottomRef    = useRef(null);   // used for BOTH open AND close
@@ -98,6 +105,32 @@ export default function Works() {
         }
       };
 
+      /* ── Card Focus calculation (runs on scroll/refresh) ────── */
+      const updateFocus = () => {
+        const cards = track.querySelectorAll('.project-card');
+        const centerX = window.innerWidth / 2;
+
+        cards.forEach((card) => {
+          const rect = card.getBoundingClientRect();
+          const cardCenter = rect.left + rect.width / 2;
+          const dist = Math.abs(centerX - cardCenter);
+
+          // Focus range from center of viewport (0 = focused, 500 = dull/small)
+          const maxDist = 500;
+          const factor = Math.min(1, dist / maxDist);
+
+          const scale = 1.0 - factor * 0.22;   // 1.0 -> 0.78
+          const opacity = 1.0 - factor * 0.7;  // 1.0 -> 0.3
+
+          gsap.set(card, {
+            scale: scale,
+            opacity: opacity,
+            transformOrigin: 'center center',
+            overwrite: 'auto',
+          });
+        });
+      };
+
       /* ── Scroll phase map (progress 0 → 1) ───────────────────────
        *
        *  [0.00 – 0.25]  Phase 1 — curtains split OUTWARD
@@ -119,6 +152,10 @@ export default function Works() {
         anticipatePin: 1,
         invalidateOnRefresh: true,
 
+        onToggle(self) {
+          setIsActive(self.isActive);
+        },
+
         onUpdate(self) {
           const p = self.progress;
           const G = getGalleryDist();
@@ -133,21 +170,6 @@ export default function Works() {
           const pause_end = p2_end + PAUSE_PX;
           const p4_end = pause_end + 0.18 * S_base;
 
-          /* ── Curtains: Phase 1 (open) + Phase 4 (close) ─────────
-           *
-           * THE SAME top and bottom panels drive both directions.
-           *
-           * Phase 1 (0.00 → p1_end):
-           *   top    yPercent  0 → -100  (slides UP out of screen)
-           *   bottom yPercent  0 → +100  (slides DOWN out of screen)
-           *
-           * Pause (p2_end → pause_end):
-           *   curtains remain fully open (-100/+100) for exactly 100px.
-           *
-           * Phase 4 (pause_end → p4_end):
-           *   top    yPercent -100 → 0   (returns DOWN, seals section)
-           *   bottom yPercent +100 → 0   (returns UP,  seals section)
-           * ─────────────────────────────────────────────────────── */
           let topY, bottomY;
           let navOp, navY;
 
@@ -197,8 +219,19 @@ export default function Works() {
           setGalleryOp(1 - 0.88 * dimP);
 
           /* Phase 5 (p4_end → S): no-op — curtains shut at topY=0 */
+
+          // Update card focus sizing/dulling on scroll
+          updateFocus();
         },
+
+        onRefresh() {
+          updateFocus();
+        }
       });
+
+      // Set initial scales and positions on mount
+      requestAnimationFrame(updateFocus);
+
     }, section);
 
     return () => {
@@ -209,11 +242,21 @@ export default function Works() {
         navbar.style.transform = '';
         navbar.style.pointerEvents = '';
       }
+      const trackElement = galleryTrackRef.current;
+      if (trackElement) {
+        const cards = trackElement.querySelectorAll('.project-card');
+        cards.forEach((card) => {
+          card.style.transform = '';
+          card.style.opacity = '';
+        });
+      }
     };
   }, []);
 
   return (
     <section className="works-section" ref={sectionRef} id="projects">
+      {/* Dynamic 3D backgrounds rendering only when Works is active */}
+      {isActive && (isDark ? <GalaxyBackground /> : <SphereBackground />)}
 
       {/* ── Curtains (open on entry, close on exit) ──────────── */}
       <div className="curtain curtain-top" ref={curtainTopRef}>
@@ -233,66 +276,64 @@ export default function Works() {
         </div>
 
         <div className="gallery-track" ref={galleryTrackRef}>
-          <div className="gallery-pad" aria-hidden="true" />
-
           {PROJECTS.map((project) => (
             <article
               key={project.id}
               className="project-card"
               style={{ '--card-hue': project.hue }}
             >
-              <div className="card-visual">
-                <div className="card-glow" />
-                <div className="card-grid" />
-                <span className="card-bg-number" aria-hidden="true">
-                  {project.id}
-                </span>
-              </div>
-
-              <div className="card-body">
-                <div className="card-header">
-                  <span className="card-id">{project.id}</span>
-                  <span className="card-year">{project.year}</span>
+              <div className="project-card-inner">
+                <div className="card-visual">
+                  <div className="card-glow" />
+                  <div className="card-grid" />
+                  <span className="card-bg-number" aria-hidden="true">
+                    {project.id}
+                  </span>
                 </div>
 
-                <div className="card-text">
-                  <h3 className="card-name">{project.name}</h3>
-                  <p className="card-tagline">{project.tagline}</p>
-                  <p className="card-desc">{project.description}</p>
-                </div>
-
-                <div className="card-bottom">
-                  <div className="card-stack">
-                    {project.stack.map((tag) => (
-                      <span key={tag} className="stack-pill">{tag}</span>
-                    ))}
+                <div className="card-body">
+                  <div className="card-header">
+                    <span className="card-id">{project.id}</span>
+                    <span className="card-year">{project.year}</span>
                   </div>
-                  <a
-                    href="#"
-                    className="card-arrow"
-                    aria-label={`View ${project.name} project`}
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="16"
-                      height="16"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="1.5"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
+
+                  <div className="card-text">
+                    <h3 className="card-name">{project.name}</h3>
+                    <p className="card-tagline">{project.tagline}</p>
+                    <p className="card-desc">{project.description}</p>
+                  </div>
+
+                  <div className="card-bottom">
+                    <div className="card-stack">
+                      {project.stack.map((tag) => (
+                        <span key={tag} className="stack-pill">{tag}</span>
+                      ))}
+                    </div>
+                    <a
+                      href="#"
+                      className="card-arrow"
+                      aria-label={`View ${project.name} project`}
                     >
-                      <path d="M7 17 17 7" />
-                      <path d="M7 7h10v10" />
-                    </svg>
-                  </a>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="16"
+                        height="16"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="1.5"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      >
+                        <path d="M7 17 17 7" />
+                        <path d="M7 7h10v10" />
+                      </svg>
+                    </a>
+                  </div>
                 </div>
               </div>
             </article>
           ))}
-
-          <div className="gallery-pad" aria-hidden="true" />
         </div>
 
         <div className="scroll-cue" aria-hidden="true">
