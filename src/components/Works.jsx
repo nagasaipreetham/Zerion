@@ -73,12 +73,22 @@ export default function Works() {
   const galleryTrackRef     = useRef(null);
   const galleryContainerRef = useRef(null);
 
+  // Core glassmorphic style setup defined inline to prevent minifiers/bundlers from stripping properties like WebkitBackdropFilter
+  const glassStyle = {
+    background: isDark ? 'rgba(10, 10, 15, 0.45)' : 'rgba(255, 255, 255, 0.15)',
+    backdropFilter: 'blur(20px)',
+    WebkitBackdropFilter: 'blur(20px)',
+    border: isDark ? '1px solid rgba(255, 255, 255, 0.15)' : '1px solid rgba(255, 255, 255, 0.3)',
+    boxShadow: isDark
+      ? '0 8px 32px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.15), inset 0 -1px 0 rgba(255, 255, 255, 0.05), inset 0 0 20px 10px rgba(255, 255, 255, 0.04)'
+      : '0 8px 32px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.5), inset 0 -1px 0 rgba(255, 255, 255, 0.1), inset 0 0 20px 10px rgba(255, 255, 255, 0.15)',
+  };
+
   useEffect(() => {
     const section          = sectionRef.current;
     const curtainTop       = curtainTopRef.current;
     const curtainBottom    = curtainBottomRef.current;
     const track            = galleryTrackRef.current;
-    const galleryContainer = galleryContainerRef.current;
 
     const ctx = gsap.context(() => {
       const PAUSE_PX = 100;
@@ -91,7 +101,6 @@ export default function Works() {
       const setCurtainTopY    = gsap.quickSetter(curtainTop,       'yPercent');
       const setCurtainBottomY = gsap.quickSetter(curtainBottom,    'yPercent');
       const setTrackX         = gsap.quickSetter(track,            'x', 'px');
-      const setGalleryOp      = gsap.quickSetter(galleryContainer, 'opacity');
 
       const navbar = document.querySelector('.navbar');
       const setNavbarOp = navbar ? gsap.quickSetter(navbar, 'opacity') : () => {};
@@ -145,7 +154,7 @@ export default function Works() {
        *
        *  [0.00 – 0.25]  Phase 1 — curtains split OUTWARD
        *  [0.25 – 0.68]  Phase 2 — gallery scrolls horizontally
-       *  [0.68 – 0.78]  Phase 3 — gallery dims
+       *  [0.68 – 0.78]  Phase 3 — gallery stays active / no dimming
        *  [0.74 – 0.92]  Phase 4 — SAME curtains return INWARD (close)
        *  [0.92 – 1.00]  Phase 5 — hold sealed, then natural unpin
        * ─────────────────────────────────────────────────────────── */
@@ -203,7 +212,7 @@ export default function Works() {
             navY    = -50 + t * 50;
             setNavbarPointerEvents(t > 0.2);
           } else {
-            // Phases 2 & 3 & pause — curtains fully open
+            // Phases 2 & pause — curtains fully open
             topY    = -100;
             bottomY =  100;
 
@@ -223,12 +232,7 @@ export default function Works() {
           const galleryP = scrollDist > 0 ? Math.max(0, Math.min(1, (currentScroll - p1_end) / scrollDist)) : 1;
           setTrackX(-G * galleryP);
 
-          /* ── Phase 3: gallery dims (p2_end → p2_end + dimDuration) ─ */
-          const dimDuration = 0.10 * S_base;
-          const dimP = dimDuration > 0 ? Math.max(0, Math.min(1, (currentScroll - p2_end) / dimDuration)) : 1;
-          setGalleryOp(1 - 0.88 * dimP);
-
-          /* Phase 5 (p4_end → S): no-op — curtains shut at topY=0 */
+          /* Phase 3 Gallery Dimming has been removed as requested: cards remain fully visible at all times */
 
           // Update card focus sizing/dulling on scroll
           updateFocus();
@@ -290,7 +294,7 @@ export default function Works() {
         });
       }
     };
-  }, []);
+  }, [isDark]);
 
   return (
     <section className="works-section" ref={sectionRef} id="projects">
@@ -328,7 +332,7 @@ export default function Works() {
               className="project-card"
               style={{ '--card-hue': project.hue }}
             >
-              <div className="project-card-inner">
+              <div className="project-card-inner" style={glassStyle}>
                 <div className="card-visual">
                   <div className="card-glow" />
                   <div className="card-grid" />
