@@ -118,24 +118,25 @@
 
 .gallery-label {
   font-size: 0.62rem;
-  font-weight: 700;
+  font-weight: 800;
   letter-spacing: 0.22em;
   text-transform: uppercase;
-  color: rgba(0, 0, 0, 0.4);
+  color: #000000;
 }
 
 .dark .gallery-label {
-  color: rgba(255, 255, 255, 0.28);
+  color: #ffffff;
 }
 
 .gallery-count {
   font-size: 0.62rem;
+  font-weight: 700;
   letter-spacing: 0.14em;
-  color: rgba(0, 0, 0, 0.3);
+  color: #000000;
 }
 
 .dark .gallery-count {
-  color: rgba(255, 255, 255, 0.16);
+  color: #ffffff;
 }
 
 /* ── Gallery Track ─────────────────────────────────────────── */
@@ -176,8 +177,8 @@
   display: flex;
   flex-direction: column;
   position: relative;
+  border: none;
   transition:
-    border-color 0.4s ease,
     transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94),
     box-shadow 0.4s ease,
     background-color 0.4s ease;
@@ -232,18 +233,16 @@
 }
 
 .project-card:hover .project-card-inner {
-  border-color: rgba(0, 0, 0, 0.15);
+  border: none;
   transform: translateY(-10px);
   box-shadow:
-    0 24px 64px rgba(0, 0, 0, 0.1),
-    0 0 0 1px rgba(0, 0, 0, 0.04);
+    0 24px 64px rgba(0, 0, 0, 0.1);
 }
 
 .dark .project-card:hover .project-card-inner {
-  border-color: rgba(255, 255, 255, 0.13);
+  border: none;
   box-shadow:
-    0 24px 64px rgba(0, 0, 0, 0.55),
-    0 0 0 1px rgba(255, 255, 255, 0.06);
+    0 24px 64px rgba(0, 0, 0, 0.55);
 }
 
 /* Card Visual — abstract gradient area */
@@ -252,12 +251,20 @@
   flex-shrink: 0;
   position: relative;
   overflow: hidden;
-  background: hsl(var(--card-hue), 45%, 94%);
+  background: linear-gradient(
+    135deg,
+    hsl(var(--card-hue), 80%, 93%),
+    hsl(var(--card-hue), 70%, 86%)
+  );
   transition: background-color 0.4s ease;
 }
 
 .dark .card-visual {
-  background: hsl(var(--card-hue), 45%, 5%);
+  background: linear-gradient(
+    135deg,
+    hsl(var(--card-hue), 65%, 15%),
+    hsl(var(--card-hue), 55%, 8%)
+  );
 }
 
 /* Soft centred glow using the card accent colour */
@@ -271,9 +278,9 @@
   transform: translate(-50%, -50%);
   background: radial-gradient(
     circle,
-    hsla(var(--card-hue), 85%, 62%, 0.22) 0%,
-    hsla(var(--card-hue), 85%, 62%, 0.06) 45%,
-    transparent 70%
+    hsla(var(--card-hue), 90%, 65%, 0.35) 0%,
+    hsla(var(--card-hue), 90%, 65%, 0.12) 50%,
+    transparent 75%
   );
   pointer-events: none;
   transition: opacity 0.4s ease;
@@ -335,24 +342,25 @@
 
 .card-id {
   font-size: 0.63rem;
-  font-weight: 700;
+  font-weight: 800;
   letter-spacing: 0.22em;
-  color: rgba(0, 0, 0, 0.35);
+  color: #000000;
   font-family: 'Courier New', Courier, monospace;
 }
 
 .dark .card-id {
-  color: rgba(255, 255, 255, 0.22);
+  color: #ffffff;
 }
 
 .card-year {
   font-size: 0.63rem;
+  font-weight: 700;
   letter-spacing: 0.1em;
-  color: rgba(0, 0, 0, 0.3);
+  color: #000000;
 }
 
 .dark .card-year {
-  color: rgba(255, 255, 255, 0.18);
+  color: #ffffff;
 }
 
 .card-text {
@@ -392,12 +400,12 @@
 .card-desc {
   font-size: 0.82rem;
   line-height: 1.65;
-  color: rgba(0, 0, 0, 0.55);
+  color: #000000;
   margin: 0;
 }
 
 .dark .card-desc {
-  color: rgba(255, 255, 255, 0.4);
+  color: #ffffff;
 }
 
 /* Card Bottom Row */
@@ -437,11 +445,11 @@
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  border: 1px solid rgba(0, 0, 0, 0.1);
+  border: 1.5px solid rgba(0, 0, 0, 0.35);
   display: flex;
   align-items: center;
   justify-content: center;
-  color: rgba(0, 0, 0, 0.5);
+  color: rgba(0, 0, 0, 0.8);
   text-decoration: none;
   flex-shrink: 0;
   background: transparent;
@@ -453,21 +461,22 @@
 }
 
 .dark .card-arrow {
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  color: rgba(255, 255, 255, 0.45);
+  border: 1.5px solid rgba(255, 255, 255, 0.35);
+  color: rgba(255, 255, 255, 0.8);
 }
 
 .card-arrow:hover {
-  background: rgba(0, 0, 0, 0.05);
+  background: rgba(0, 0, 0, 0.08);
   color: #000000;
-  border-color: rgba(0, 0, 0, 0.3);
+  border-color: #000000;
   transform: rotate(45deg);
 }
 
 .dark .card-arrow:hover {
-  background: rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.12);
   color: #ffffff;
-  border-color: rgba(255, 255, 255, 0.28);
+  border-color: #ffffff;
+  transform: rotate(45deg);
 }
 
 /* ── Scroll Cue ─────────────────────────────────────────────── */
@@ -482,13 +491,13 @@
   flex-direction: column;
   align-items: center;
   gap: 7px;
-  color: rgba(0, 0, 0, 0.4);
+  color: #000000;
   animation: scrollBounce 2.4s ease-in-out infinite;
   pointer-events: none;
 }
 
 .dark .scroll-cue {
-  color: rgba(255, 255, 255, 0.2);
+  color: #ffffff;
 }
 
 .scroll-cue span {
@@ -536,12 +545,19 @@
     height: 180px;
   }
 
+  .card-body {
+    padding: 16px 18px 18px;
+    gap: 10px;
+  }
+
   .card-name {
     font-size: 1.45rem;
   }
 
   .card-desc {
-    display: none;
+    display: block;
+    font-size: 0.74rem;
+    line-height: 1.5;
   }
 
   .gallery-meta {

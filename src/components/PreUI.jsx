@@ -8,7 +8,7 @@ export default function PreUI() {
         <div className="preui-left">
           <h2 className="preui-main-title">PreUI</h2>
           <p className="preui-sub-title">
-            <span className="highlight-text">Under Construction</span>
+            <span className="highlight-text">Under Development</span>
           </p>
           <p className="preui-desc">
             PreUI is a ready-to-use UI component library providing copy-pasteable code with detailed implementation instructions.
