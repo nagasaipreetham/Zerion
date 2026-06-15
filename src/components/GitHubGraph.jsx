@@ -54,8 +54,6 @@ export default function GitHubGraph() {
   const [loading, setLoading]         = useState(true);
   const [tooltip, setTooltip]         = useState(null);        // { date, count, x, y }
 
-  /* Pixel width of one week column: cell (12 px) + gap (3 px) */
-  const COL_WIDTH = 15;
 
   /* ── Fetch data in parallel ─────────────────────────────────────────── */
   useEffect(() => {
@@ -155,13 +153,13 @@ export default function GitHubGraph() {
                 <div className="graph-day-label-spacer" />
                 <div
                   className="graph-month-labels"
-                  style={{ width: weeks.length * COL_WIDTH }}
+                  style={{ width: `calc(${weeks.length} * var(--col-width))` }}
                 >
                   {monthLabels.map(({ label, weekIdx }) => (
                     <span
                       key={`${label}-${weekIdx}`}
                       className="graph-month-label"
-                      style={{ left: weekIdx * COL_WIDTH }}
+                      style={{ left: `calc(${weekIdx} * var(--col-width))` }}
                     >
                       {label}
                     </span>

@@ -18,6 +18,12 @@
   background-color: var(--bg-color);
   position: relative;
   overflow: visible; /* allow tooltip to escape on desktop */
+
+  /* Heatmap dimension variables */
+  --cell-size: 12px;
+  --cell-gap: 3px;
+  --col-width: calc(var(--cell-size) + var(--cell-gap));
+  --spacer-width: 32px;
 }
 
 /* ── Header row: label (left) + commit count (right) ───────────────────── */
@@ -90,7 +96,7 @@
 /* Transparent spacer that sits above the day-label column so month labels
    line up perfectly with the cells to their right */
 .graph-day-label-spacer {
-  width: 32px;
+  width: var(--spacer-width);
   flex-shrink: 0;
 }
 
@@ -126,7 +132,7 @@
 .graph-day-labels {
   display: flex;
   flex-direction: column;
-  gap: 3px;
+  gap: var(--cell-gap);
   flex-shrink: 0;
   width: 28px;
   padding-top: 0;
@@ -138,9 +144,9 @@
   letter-spacing: 0.04em;
   color: var(--text-color);
   opacity: 0.45;
-  /* Must match cell height (12px) so the labels align with the rows */
-  height: 12px;
-  line-height: 12px;
+  /* Must match cell height so the labels align with the rows */
+  height: var(--cell-size);
+  line-height: var(--cell-size);
   text-align: right;
   padding-right: 4px;
 }
@@ -149,21 +155,21 @@
 
 .graph-grid {
   display: flex;
-  gap: 3px;
+  gap: var(--cell-gap);
   flex-shrink: 0;
 }
 
 .graph-week {
   display: flex;
   flex-direction: column;
-  gap: 3px;
+  gap: var(--cell-gap);
 }
 
 /* Base cell ─────────────────────────────────────────────────────────────── */
 
 .graph-cell {
-  width:  12px;
-  height: 12px;
+  width:  var(--cell-size);
+  height: var(--cell-size);
   border-radius: 2px;
   cursor: pointer;
   flex-shrink: 0;
@@ -279,20 +285,20 @@
 
 .graph-skeleton-grid {
   display: flex;
-  gap: 3px;
+  gap: var(--cell-gap);
   min-width: min-content;
-  margin-left: 32px; /* align with the main grid — same as day-label-spacer */
+  margin-left: var(--spacer-width); /* align with the main grid — same as day-label-spacer */
 }
 
 .graph-skeleton-week {
   display: flex;
   flex-direction: column;
-  gap: 3px;
+  gap: var(--cell-gap);
 }
 
 .graph-skeleton-cell {
-  width:  12px;
-  height: 12px;
+  width:  var(--cell-size);
+  height: var(--cell-size);
   border-radius: 2px;
   background: var(--border-color);
   animation: skeletonPulse 1.6s ease-in-out infinite alternate;
@@ -324,6 +330,7 @@
 @media (max-width: 640px) {
   .github-graph-section {
     padding: 32px 16px 40px;
+    --cell-size: 10px;
   }
 
   /* Compress header a little on narrow screens */
@@ -331,21 +338,13 @@
     font-size: 0.75rem;
   }
 
-  /* Shrink cells from 12 px → 10 px */
-  .graph-cell {
-    width:  10px;
-    height: 10px;
+  /* Reduce text size of month labels on mobile as requested */
+  .graph-month-label {
+    font-size: 0.52rem;
   }
 
   .graph-day-label {
-    height: 10px;
-    line-height: 10px;
-    font-size: 0.55rem;
-  }
-
-  .graph-skeleton-cell {
-    width:  10px;
-    height: 10px;
+    font-size: 0.52rem;
   }
 }
 
@@ -355,7 +354,7 @@
     display: none;
   }
 
-  .graph-day-label-spacer {
-    width: 0;
+  .github-graph-section {
+    --spacer-width: 0px;
   }
 }
