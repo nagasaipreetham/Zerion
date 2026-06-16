@@ -4,16 +4,18 @@ import './SectionNavigator.css';
 const SECTIONS = [
   { id: 'hero', label: 'HERO' },
   { id: 'about', label: 'ABOUT' },
+  { id: 'skills', label: 'SKILLS' },
   { id: 'sponsors', label: 'SPONSORS' },
   { id: 'projects', label: 'WORKS' },
+  { id: 'preui', label: 'PREUI' },
   { id: 'contact', label: 'CONTACT' },
   { id: 'footer', label: 'FOOTER' }
 ];
 
-// Y coordinate arrays (defined relative to a 260x320 SVG ViewBox)
-const Y_COLLAPSED = [125, 139, 153, 167, 181, 195];
-const Y_RIGHT_EXPANDED = [115, 133, 151, 169, 187, 205]; // closer spacing on the right
-const Y_LEFT_EXPANDED = [60, 100, 140, 180, 220, 260];    // wider diverging spacing on the left
+// Y coordinate arrays (defined relative to a 260x400 SVG ViewBox)
+const Y_COLLAPSED = [151, 165, 179, 193, 207, 221, 235, 249];
+const Y_RIGHT_EXPANDED = [137, 155, 173, 191, 209, 227, 245, 263]; // closer spacing on the right
+const Y_LEFT_EXPANDED = [53, 95, 137, 179, 221, 263, 305, 347];    // wider diverging spacing on the left
 
 export default function SectionNavigator() {
   const [isHovered, setIsHovered] = useState(false);
@@ -24,50 +26,45 @@ export default function SectionNavigator() {
   useEffect(() => {
     const elements = SECTIONS.map(s => document.getElementById(s.id)).filter(Boolean);
 
-    const observerOptions = {
-      root: null,
-      rootMargin: '-35% 0px -35% 0px', // detects when crossing center portion of screen
-      threshold: 0
-    };
-
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          setActiveSection(entry.target.id);
-        }
-      });
-    }, observerOptions);
-
-    elements.forEach(el => observer.observe(el));
-
-    // Fallback/Initial layout check
     const checkActive = () => {
-      let currentActive = 'hero';
-      let minDistance = Infinity;
+      const centerY = window.innerHeight / 2;
+      let foundActive = null;
 
-      elements.forEach(el => {
+      for (const el of elements) {
         const rect = el.getBoundingClientRect();
-        // Distance from center-top of viewport
-        const dist = Math.abs(rect.top - window.innerHeight * 0.2);
-        if (rect.top < window.innerHeight * 0.6 && rect.bottom > window.innerHeight * 0.15) {
+        // Check if the center Y coordinate of the screen is inside the section's vertical bounds
+        if (rect.top <= centerY && rect.bottom >= centerY) {
+          foundActive = el.id;
+          break;
+        }
+      }
+
+      // Fallback: If no section bounds contain centerY (e.g. extreme top/bottom scroll),
+      // choose the one closest to the viewport center Y
+      if (!foundActive) {
+        let minDistance = Infinity;
+        elements.forEach(el => {
+          const rect = el.getBoundingClientRect();
+          const elementCenter = (rect.top + rect.bottom) / 2;
+          const dist = Math.abs(elementCenter - centerY);
           if (dist < minDistance) {
             minDistance = dist;
-            currentActive = el.id;
+            foundActive = el.id;
           }
-        }
-      });
-      
-      setActiveSection(currentActive);
+        });
+      }
+
+      if (foundActive) {
+        setActiveSection(foundActive);
+      }
     };
 
-    // Run check once on mount and register scroll/resize handlers
+    // Run check once on mount and register scroll/resize event listeners
     checkActive();
-    window.addEventListener('scroll', checkActive);
-    window.addEventListener('resize', checkActive);
+    window.addEventListener('scroll', checkActive, { passive: true });
+    window.addEventListener('resize', checkActive, { passive: true });
 
     return () => {
-      elements.forEach(el => observer.unobserve(el));
-      observer.disconnect();
       window.removeEventListener('scroll', checkActive);
       window.removeEventListener('resize', checkActive);
     };
@@ -99,7 +96,7 @@ export default function SectionNavigator() {
       aria-label="Section navigation menu"
     >
       {/* SVG Canvas for drawing the curved connector lines */}
-      <svg className="navigator-svg" viewBox="0 0 260 320" xmlns="http://www.w3.org/2000/svg">
+      <svg className="navigator-svg" viewBox="0 0 260 400" xmlns="http://www.w3.org/2000/svg">
         {SECTIONS.map((section, idx) => {
           const isActive = activeSection === section.id;
           const isItemHovered = hoveredIndex === idx;
@@ -109,10 +106,10 @@ export default function SectionNavigator() {
           const yLeft = isHovered ? Y_LEFT_EXPANDED[idx] : Y_COLLAPSED[idx];
 
           const xRight = 250;
-          const xLeft = isHovered ? 100 : 230;
+          const xLeft = isHovered ? 130 : 230;
 
-          const cxRight = isHovered ? 175 : 243.3;
-          const cxLeft = isHovered ? 175 : 236.7;
+          const cxRight = isHovered ? 190 : 243.3;
+          const cxLeft = isHovered ? 190 : 236.7;
 
           // Cubic Bezier path
           const pathData = `M ${xRight},${yRight} C ${cxRight},${yRight} ${cxLeft},${yLeft} ${xLeft},${yLeft}`;

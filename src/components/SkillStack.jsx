@@ -25,7 +25,7 @@ const SKILLS = [
 
 export default function SkillStack() {
   return (
-    <section className="skills-section">
+    <section className="skills-section" id="skills">
       <div className="skills-list">
         {SKILLS.map((skill) => {
           const isMonochrome = ['rest-api-icon.svg', 'express.svg', 'github.svg'].includes(skill.file);
