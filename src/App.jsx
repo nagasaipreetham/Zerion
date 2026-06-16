@@ -23,17 +23,20 @@ gsap.registerPlugin(ScrollTrigger);
 function App() {
   const location = useLocation();
 
-  /* ── Global smooth scroll (Lenis + GSAP ticker) ────────────── */
+  /* ── Global smooth scroll (Lenis + GSAP ticker) ──────────────── */
   useEffect(() => {
     const lenis = new Lenis({
       lerp: 0.1,        // smoothing factor (0 = instant, 1 = never arrives)
       smoothWheel: true,
     });
 
+    // Expose lenis on window so other modules can call lenis.scrollTo
+    window.__lenis = lenis;
+
     // Keep ScrollTrigger in sync with Lenis scroll position
     lenis.on('scroll', ScrollTrigger.update);
 
-    // Drive Lenis via GSAP's requestAnimationFrame ticker
+    // Drive Lenis via GSAP’s requestAnimationFrame ticker
     const onTick = (time) => lenis.raf(time * 1000);
     gsap.ticker.add(onTick);
     gsap.ticker.lagSmoothing(0);
@@ -41,22 +44,43 @@ function App() {
     return () => {
       gsap.ticker.remove(onTick);
       lenis.destroy();
+      window.__lenis = null;
     };
   }, []);
 
-  /* ── Scroll/Hash Router Sync ───────────────────────────────── */
+  /* ── Route change: reset navbar GSAP inline styles + scroll to top ── */
   useEffect(() => {
+    // Always reset any GSAP-applied inline styles on the navbar first.
+    // Works.jsx animates the navbar opacity/transform; these must be
+    // cleared when we navigate away so /resume starts clean.
+    const navbar = document.querySelector('.navbar');
+    if (navbar) {
+      navbar.style.opacity = '';
+      navbar.style.transform = '';
+      navbar.style.pointerEvents = '';
+    }
+
     const hash = location.hash;
     if (hash) {
       const element = document.getElementById(hash.slice(1));
       if (element) {
         const timer = setTimeout(() => {
-          element.scrollIntoView({ behavior: 'smooth' });
+          // Prefer Lenis smooth scroll when available
+          if (window.__lenis) {
+            window.__lenis.scrollTo(element, { offset: -80, duration: 1.2 });
+          } else {
+            element.scrollIntoView({ behavior: 'smooth' });
+          }
         }, 150);
         return () => clearTimeout(timer);
       }
     } else {
-      window.scrollTo(0, 0);
+      // Scroll to top via Lenis if available, otherwise native
+      if (window.__lenis) {
+        window.__lenis.scrollTo(0, { immediate: true });
+      } else {
+        window.scrollTo(0, 0);
+      }
     }
   }, [location.pathname, location.hash]);
 
@@ -126,11 +150,11 @@ function App() {
               </div>
               <main>
                 <PreUI />
-                
+
                 <div className="separator-full-width">
                   <Separator />
                 </div>
-                
+
                 <Contact />
 
                 <SkillsScroll />
@@ -149,14 +173,14 @@ function App() {
         <Route path="/resume" element={
           <div className="layout-container">
             <div className="nav-placeholder" />
-            
+
             <div className="separator-full-width">
               <Separator />
             </div>
 
             <main>
               <Resume />
-              
+
               <SkillsScroll />
 
               <GitHubGraph />

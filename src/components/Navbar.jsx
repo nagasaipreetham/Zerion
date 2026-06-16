@@ -1,29 +1,62 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useTheme } from '../context/ThemeContext';
 import './Navbar.css';
 
 export default function Navbar() {
   const { theme, toggleTheme } = useTheme();
-  const [scrolled, setScrolled] = useState(false);
+  const [scrolled, setScrolled]       = useState(false);
+  const [menuOpen, setMenuOpen]       = useState(false);
+  const [centerHidden, setCenterHidden] = useState(false);
   const location = useLocation();
   const isHome = location.pathname === '/';
+  const navRef = useRef(null);
 
+  /* ── Detect scroll position ─────────────────────────────── */
   useEffect(() => {
     const handleScroll = () => {
-      if (window.scrollY > 20) {
-        setScrolled(true);
-      } else {
-        setScrolled(false);
-      }
+      setScrolled(window.scrollY > 20);
+      // Close menu on page scroll
+      if (menuOpen) setMenuOpen(false);
     };
-
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
+  }, [menuOpen]);
+
+  /* ── Detect if nav-center is hidden (responsive breakpoint) ─ */
+  useEffect(() => {
+    const checkCenter = () => {
+      // nav-center hides at 768px via CSS media query
+      setCenterHidden(window.innerWidth <= 768);
+    };
+    checkCenter();
+    window.addEventListener('resize', checkCenter);
+    return () => window.removeEventListener('resize', checkCenter);
   }, []);
 
+  /* ── Close menu on outside click ─────────────────────────── */
+  useEffect(() => {
+    if (!menuOpen) return;
+    const handleOutside = (e) => {
+      if (navRef.current && !navRef.current.contains(e.target)) {
+        setMenuOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleOutside);
+    document.addEventListener('touchstart', handleOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleOutside);
+      document.removeEventListener('touchstart', handleOutside);
+    };
+  }, [menuOpen]);
+
+  /* ── Close menu when route changes ──────────────────────── */
+  useEffect(() => {
+    setMenuOpen(false);
+  }, [location.pathname, location.hash]);
+
   return (
-    <nav className={`navbar ${scrolled ? 'scrolled' : ''}`}>
+    <nav className={`navbar ${scrolled ? 'scrolled' : ''} ${menuOpen ? 'menu-open' : ''}`} ref={navRef}>
       {/* Left section */}
       <div className="nav-left">
         <Link to="/" className="logo">Zerion</Link>
@@ -36,7 +69,7 @@ export default function Navbar() {
         </div>
       </div>
 
-      {/* Center section */}
+      {/* Center section — hidden below 768px via CSS */}
       <div className="nav-center">
         {isHome ? (
           <a href="#projects" className="nav-link">Projects</a>
@@ -52,7 +85,22 @@ export default function Navbar() {
         <button className="search-btn">
           Search... <span className="cmd-k">⌘K</span>
         </button>
-        <button 
+
+        {/* Hamburger — only visible when center is hidden */}
+        {centerHidden && (
+          <button
+            className={`hamburger-btn ${menuOpen ? 'open' : ''}`}
+            onClick={() => setMenuOpen(prev => !prev)}
+            aria-label="Toggle menu"
+            aria-expanded={menuOpen}
+          >
+            <span className="ham-line" />
+            <span className="ham-line" />
+            <span className="ham-line" />
+          </button>
+        )}
+
+        <button
           className="theme-toggle"
           onClick={toggleTheme}
           aria-label="Toggle theme"
@@ -75,6 +123,19 @@ export default function Navbar() {
           </div>
         </button>
       </div>
+
+      {/* Dropdown menu — only visible on mobile when menu is open */}
+      {centerHidden && menuOpen && (
+        <div className="nav-dropdown">
+          {isHome ? (
+            <a href="#projects" className="dropdown-link" onClick={() => setMenuOpen(false)}>Projects</a>
+          ) : (
+            <Link to="/#projects" className="dropdown-link" onClick={() => setMenuOpen(false)}>Projects</Link>
+          )}
+          <a href="#blogs" className="dropdown-link" onClick={() => setMenuOpen(false)}>Blogs</a>
+          <Link to="/resume" className="dropdown-link" onClick={() => setMenuOpen(false)}>Resume</Link>
+        </div>
+      )}
     </nav>
   );
 }

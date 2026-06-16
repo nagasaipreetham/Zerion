@@ -15,12 +15,14 @@
   position: absolute;
   inset: 0;
   z-index: 1;
-  background: #ffffff; /* Light mode background */
+  background: #ffffff;
+  /* Light mode background */
   transition: background-color 0.5s ease;
 }
 
 .dark .works-bg-layer {
-  background: #050505; /* Dark mode background */
+  background: #050505;
+  /* Dark mode background */
 }
 
 .works-3d-bg {
@@ -46,7 +48,8 @@
   top: 0;
   height: 50%;
   display: flex;
-  align-items: flex-end;   /* text sits at the seam (bottom edge) */
+  align-items: flex-end;
+  /* text sits at the seam (bottom edge) */
   justify-content: center;
 }
 
@@ -54,7 +57,8 @@
   bottom: 0;
   height: 50%;
   display: flex;
-  align-items: flex-start; /* text sits at the seam (top edge) */
+  align-items: flex-start;
+  /* text sits at the seam (top edge) */
   justify-content: center;
 }
 
@@ -191,12 +195,10 @@
   left: 0;
   right: 0;
   height: 1px;
-  background: linear-gradient(
-    90deg,
-    transparent,
-    rgba(255, 255, 255, 0.8),
-    transparent
-  );
+  background: linear-gradient(90deg,
+      transparent,
+      rgba(255, 255, 255, 0.8),
+      transparent);
   z-index: 5;
   pointer-events: none;
 }
@@ -208,12 +210,10 @@
   left: 0;
   width: 1px;
   height: 100%;
-  background: linear-gradient(
-    180deg,
-    rgba(255, 255, 255, 0.8),
-    transparent,
-    rgba(255, 255, 255, 0.3)
-  );
+  background: linear-gradient(180deg,
+      rgba(255, 255, 255, 0.8),
+      transparent,
+      rgba(255, 255, 255, 0.3));
   z-index: 5;
   pointer-events: none;
 }
@@ -221,7 +221,8 @@
 .card-dimmer {
   position: absolute;
   inset: 0;
-  z-index: 4; /* Overlay content but below border highlights (5) */
+  z-index: 4;
+  /* Overlay content but below border highlights (5) */
   pointer-events: none;
   background: #ffffff;
   opacity: 0;
@@ -251,20 +252,16 @@
   flex-shrink: 0;
   position: relative;
   overflow: hidden;
-  background: linear-gradient(
-    135deg,
-    hsl(var(--card-hue), 80%, 93%),
-    hsl(var(--card-hue), 70%, 86%)
-  );
+  background: linear-gradient(135deg,
+      hsl(var(--card-hue), 80%, 93%),
+      hsl(var(--card-hue), 70%, 86%));
   transition: background-color 0.4s ease;
 }
 
 .dark .card-visual {
-  background: linear-gradient(
-    135deg,
-    hsl(var(--card-hue), 65%, 15%),
-    hsl(var(--card-hue), 55%, 8%)
-  );
+  background: linear-gradient(135deg,
+      hsl(var(--card-hue), 65%, 15%),
+      hsl(var(--card-hue), 55%, 8%));
 }
 
 /* Soft centred glow using the card accent colour */
@@ -276,12 +273,10 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background: radial-gradient(
-    circle,
-    hsla(var(--card-hue), 90%, 65%, 0.35) 0%,
-    hsla(var(--card-hue), 90%, 65%, 0.12) 50%,
-    transparent 75%
-  );
+  background: radial-gradient(circle,
+      hsla(var(--card-hue), 90%, 65%, 0.35) 0%,
+      hsla(var(--card-hue), 90%, 65%, 0.12) 50%,
+      transparent 75%);
   pointer-events: none;
   transition: opacity 0.4s ease;
 }
@@ -508,8 +503,17 @@
 }
 
 @keyframes scrollBounce {
-  0%, 100% { transform: translateX(-50%) translateY(0); opacity: 0.8; }
-  50%       { transform: translateX(-50%) translateY(5px); opacity: 0.4; }
+
+  0%,
+  100% {
+    transform: translateX(-50%) translateY(0);
+    opacity: 0.8;
+  }
+
+  50% {
+    transform: translateX(-50%) translateY(5px);
+    opacity: 0.4;
+  }
 }
 
 /* ── Film Grain Overlay ─────────────────────────────────────── */

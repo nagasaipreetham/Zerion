@@ -167,18 +167,15 @@
   cursor: not-allowed;
 }
 
-/* Displayer/Viewer Container */
+/* Displayer/Viewer Container — no fixed height; shows the full image */
 .resume-viewer-display {
   width: 100%;
-  height: 680px;
-  overflow: auto;
+  overflow: hidden;
   background: rgba(0, 0, 0, 0.02);
   display: flex;
   justify-content: center;
   align-items: flex-start;
   position: relative;
-  /* Hide scrollbar defaults */
-  scrollbar-width: thin;
 }
 
 .dark .resume-viewer-display {
@@ -277,7 +274,5 @@
     font-size: 2.2rem;
   }
 
-  .resume-viewer-display {
-    height: 520px; /* shorter display container on mobile */
-  }
+  /* No height override needed — image always fully visible */
 }

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useLayoutEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { ScrollToPlugin } from 'gsap/ScrollToPlugin';
@@ -67,10 +67,10 @@ export default function Works() {
   const isDark = theme === 'dark';
   const [isActive, setIsActive] = useState(false);
 
-  const sectionRef          = useRef(null);
-  const curtainTopRef       = useRef(null);   // used for BOTH open AND close
-  const curtainBottomRef    = useRef(null);   // used for BOTH open AND close
-  const galleryTrackRef     = useRef(null);
+  const sectionRef = useRef(null);
+  const curtainTopRef = useRef(null);   // used for BOTH open AND close
+  const curtainBottomRef = useRef(null);   // used for BOTH open AND close
+  const galleryTrackRef = useRef(null);
   const galleryContainerRef = useRef(null);
 
   // Core glassmorphic style setup defined inline to prevent minifiers/bundlers from stripping properties like WebkitBackdropFilter
@@ -83,11 +83,11 @@ export default function Works() {
       : '0 8px 32px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.5), inset 0 -1px 0 rgba(255, 255, 255, 0.1), inset 0 0 20px 10px rgba(255, 255, 255, 0.15)',
   };
 
-  useEffect(() => {
-    const section          = sectionRef.current;
-    const curtainTop       = curtainTopRef.current;
-    const curtainBottom    = curtainBottomRef.current;
-    const track            = galleryTrackRef.current;
+  useLayoutEffect(() => {
+    const section = sectionRef.current;
+    const curtainTop = curtainTopRef.current;
+    const curtainBottom = curtainBottomRef.current;
+    const track = galleryTrackRef.current;
 
     const ctx = gsap.context(() => {
       const PAUSE_PX = 100;
@@ -97,13 +97,13 @@ export default function Works() {
         Math.max(0, track.scrollWidth - window.innerWidth);
 
       /* ── High-perf setters (created once, used every tick) ───── */
-      const setCurtainTopY    = gsap.quickSetter(curtainTop,       'yPercent');
-      const setCurtainBottomY = gsap.quickSetter(curtainBottom,    'yPercent');
-      const setTrackX         = gsap.quickSetter(track,            'x', 'px');
+      const setCurtainTopY = gsap.quickSetter(curtainTop, 'yPercent');
+      const setCurtainBottomY = gsap.quickSetter(curtainBottom, 'yPercent');
+      const setTrackX = gsap.quickSetter(track, 'x', 'px');
 
       const navbar = document.querySelector('.navbar');
-      const setNavbarOp = navbar ? gsap.quickSetter(navbar, 'opacity') : () => {};
-      const setNavbarY = navbar ? gsap.quickSetter(navbar, 'y', 'px') : () => {};
+      const setNavbarOp = navbar ? gsap.quickSetter(navbar, 'opacity') : () => { };
+      const setNavbarY = navbar ? gsap.quickSetter(navbar, 'y', 'px') : () => { };
 
       let navbarVisible = true;
       const setNavbarPointerEvents = (visible) => {
@@ -194,29 +194,29 @@ export default function Works() {
           if (currentScroll <= p1_end) {
             // Phase 1 — opening
             const t = p1_end > 0 ? Math.max(0, Math.min(1, currentScroll / p1_end)) : 1;
-            topY    = t * -100;
-            bottomY = t *  100;
-            
-            navOp   = 1 - t;
-            navY    = t * -50;
+            topY = t * -100;
+            bottomY = t * 100;
+
+            navOp = 1 - t;
+            navY = t * -50;
             setNavbarPointerEvents(t < 0.8);
           } else if (currentScroll >= pause_end) {
             // Phase 4 — closing (same curtains, reversed direction)
             const closeDist = p4_end - pause_end;
             const t = closeDist > 0 ? Math.max(0, Math.min(1, (currentScroll - pause_end) / closeDist)) : 1;
-            topY    = -100 + t * 100;   //  -100 → 0
-            bottomY =  100 - t * 100;   //  +100 → 0
+            topY = -100 + t * 100;   //  -100 → 0
+            bottomY = 100 - t * 100;   //  +100 → 0
 
-            navOp   = t;
-            navY    = -50 + t * 50;
+            navOp = t;
+            navY = -50 + t * 50;
             setNavbarPointerEvents(t > 0.2);
           } else {
             // Phases 2 & pause — curtains fully open
-            topY    = -100;
-            bottomY =  100;
+            topY = -100;
+            bottomY = 100;
 
-            navOp   = 0;
-            navY    = -50;
+            navOp = 0;
+            navY = -50;
             setNavbarPointerEvents(false);
           }
 

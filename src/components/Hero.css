@@ -280,6 +280,11 @@
   object-fit: contain;
 }
 
+/* Hero Resume button — hidden on desktop (nav has it already) */
+.hero-resume-btn-mobile {
+  display: none;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
   .hero-section {
@@ -288,7 +293,7 @@
     padding: 40px 24px;
     gap: 30px;
   }
-  
+
   .available-pill {
     margin-left: auto;
     margin-right: auto;
@@ -304,5 +309,10 @@
 
   .hero-right-side {
     margin-bottom: 24px;
+  }
+
+  /* Show the resume button in hero only when nav-center is hidden */
+  .hero-resume-btn-mobile {
+    display: inline-flex;
   }
 }

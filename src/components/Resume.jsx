@@ -1,51 +1,65 @@
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, useCallback } from 'react';
 import { ZoomIn, ZoomOut, RotateCw, Download } from 'lucide-react';
 import './Resume.css';
 
+const IMAGE_URL = 'https://pub-64eaf935fdac4b6bae628841ce7c1e12.r2.dev/PreethamDev_page.jpg';
+const PDF_URL   = 'https://pub-64eaf935fdac4b6bae628841ce7c1e12.r2.dev/PreethamDev.pdf';
+
 export default function Resume() {
   const [pdfBlobUrl, setPdfBlobUrl] = useState(null);
-  const [zoom, setZoom] = useState(100);
-  const containerRef = useRef(null);
+  // zoom stored as a plain number (50 – 150) representing percentage
+  const [zoom, setZoom]             = useState(100);
+  // key used to force re-fetch the image
+  const [imgKey, setImgKey]         = useState(0);
+  const containerRef                = useRef(null);
+  // Ref to hold the current blob URL so the cleanup can always access it
+  const blobUrlRef                  = useRef(null);
 
-  // Fetch and cache the PDF as a Blob URL gracefully in the background
-  useEffect(() => {
-    window.scrollTo(0, 0);
-    
-    let active = true;
-    let localUrl = null;
-
-    const fetchPdf = async () => {
-      try {
-        const response = await fetch('https://pub-64eaf935fdac4b6bae628841ce7c1e12.r2.dev/PreethamDev.pdf');
-        if (response.ok && active) {
-          const blob = await response.blob();
-          localUrl = URL.createObjectURL(blob);
-          if (active) {
-            setPdfBlobUrl(localUrl);
-          }
-        }
-      } catch (error) {
-        console.error("Failed to fetch PDF:", error);
+  /* ── Fetch the PDF blob (also called when Reload is clicked) ─ */
+  const fetchPdf = useCallback(async () => {
+    // Revoke previous blob URL if there is one
+    if (blobUrlRef.current) {
+      URL.revokeObjectURL(blobUrlRef.current);
+      blobUrlRef.current = null;
+    }
+    setPdfBlobUrl(null); // show loading state
+    try {
+      const response = await fetch(PDF_URL, { cache: 'no-store' });
+      if (response.ok) {
+        const blob = await response.blob();
+        const url  = URL.createObjectURL(blob);
+        blobUrlRef.current = url;
+        setPdfBlobUrl(url);
       }
-    };
-    
-    fetchPdf();
-
-    return () => {
-      active = false;
-      // Clean up the blob URL when component unmounts
-      if (localUrl) {
-        URL.revokeObjectURL(localUrl);
-      }
-    };
+    } catch (error) {
+      console.error('Failed to fetch PDF:', error);
+    }
   }, []);
 
-  // Zoom controls
-  const handleZoomIn = () => setZoom(prev => Math.min(200, prev + 10));
-  const handleZoomOut = () => setZoom(prev => Math.max(50, prev - 10));
-  const handleReset = () => setZoom(100);
+  /* ── Initial fetch on mount ─────────────────────────────────── */
+  useEffect(() => {
+    fetchPdf();
+    return () => {
+      // Cleanup blob URL on unmount
+      if (blobUrlRef.current) {
+        URL.revokeObjectURL(blobUrlRef.current);
+      }
+    };
+  }, [fetchPdf]);
 
-  // Listen to wheel zoom (Ctrl + Mouse Scroll) on the viewer
+  /* ── Zoom controls ──────────────────────────────────────────── */
+  // Max 150%, min 50%, each step = 1% (smooth)
+  const handleZoomIn  = () => setZoom(prev => Math.min(150, prev + 10));
+  const handleZoomOut = () => setZoom(prev => Math.max(50,  prev - 10));
+
+  /* ── Reload: reset zoom to 100%, re-fetch image and PDF ─────── */
+  const handleReset = () => {
+    setZoom(100);
+    setImgKey(prev => prev + 1); // force image re-load
+    fetchPdf();                   // re-fetch PDF blob
+  };
+
+  /* ── Ctrl + Mouse wheel zoom ────────────────────────────────── */
   useEffect(() => {
     const container = containerRef.current;
     if (!container) return;
@@ -53,24 +67,23 @@ export default function Resume() {
     const handleWheel = (e) => {
       if (e.ctrlKey) {
         e.preventDefault();
-        const delta = e.deltaY < 0 ? 10 : -10;
-        setZoom(prev => Math.min(200, Math.max(50, prev + delta)));
+        // Each wheel notch = 1%
+        const delta = e.deltaY < 0 ? 1 : -1;
+        setZoom(prev => Math.min(150, Math.max(50, prev + delta)));
       }
     };
 
     container.addEventListener('wheel', handleWheel, { passive: false });
-    return () => {
-      container.removeEventListener('wheel', handleWheel);
-    };
+    return () => container.removeEventListener('wheel', handleWheel);
   }, []);
 
-  // Listen to multi-touch pinch gestures for mobile zoom
+  /* ── Pinch-to-zoom (touch) ──────────────────────────────────── */
   useEffect(() => {
     const container = containerRef.current;
     if (!container) return;
 
     let initialDist = 0;
-    let initialZoom = 100;
+    let initialZoom = zoom;
 
     const handleTouchStart = (e) => {
       if (e.touches.length === 2) {
@@ -85,29 +98,26 @@ export default function Resume() {
     const handleTouchMove = (e) => {
       if (e.touches.length === 2 && initialDist > 0) {
         e.preventDefault();
-        const dist = Math.hypot(
+        const dist   = Math.hypot(
           e.touches[0].clientX - e.touches[1].clientX,
           e.touches[0].clientY - e.touches[1].clientY
         );
-        const factor = dist / initialDist;
+        const factor     = dist / initialDist;
         const targetZoom = Math.round(initialZoom * factor);
-        // Step zoom level smoothly within bounds
-        setZoom(Math.min(200, Math.max(50, targetZoom)));
+        setZoom(Math.min(150, Math.max(50, targetZoom)));
       }
     };
 
-    const handleTouchEnd = () => {
-      initialDist = 0;
-    };
+    const handleTouchEnd = () => { initialDist = 0; };
 
-    container.addEventListener('touchstart', handleTouchStart);
-    container.addEventListener('touchmove', handleTouchMove, { passive: false });
-    container.addEventListener('touchend', handleTouchEnd);
+    container.addEventListener('touchstart',  handleTouchStart);
+    container.addEventListener('touchmove',   handleTouchMove,  { passive: false });
+    container.addEventListener('touchend',    handleTouchEnd);
 
     return () => {
       container.removeEventListener('touchstart', handleTouchStart);
-      container.removeEventListener('touchmove', handleTouchMove);
-      container.removeEventListener('touchend', handleTouchEnd);
+      container.removeEventListener('touchmove',  handleTouchMove);
+      container.removeEventListener('touchend',   handleTouchEnd);
     };
   }, [zoom]);
 
@@ -121,25 +131,25 @@ export default function Resume() {
         </p>
       </div>
 
-      {/* Image viewer component */}
+      {/* Image viewer widget */}
       <div className="resume-viewer-widget">
-        
+
         {/* Top bar controls */}
         <div className="resume-viewer-controls">
           <div className="resume-controls-left">
-            <button 
-              className="resume-control-btn" 
-              onClick={handleZoomOut} 
+            <button
+              className="resume-control-btn"
+              onClick={handleZoomOut}
               disabled={zoom <= 50 || !pdfBlobUrl}
               aria-label="Zoom Out"
             >
               <ZoomOut size={15} />
             </button>
             <span className="resume-zoom-percentage">{zoom}%</span>
-            <button 
-              className="resume-control-btn" 
-              onClick={handleZoomIn} 
-              disabled={zoom >= 200 || !pdfBlobUrl}
+            <button
+              className="resume-control-btn"
+              onClick={handleZoomIn}
+              disabled={zoom >= 150 || !pdfBlobUrl}
               aria-label="Zoom In"
             >
               <ZoomIn size={15} />
@@ -151,19 +161,20 @@ export default function Resume() {
           </div>
 
           <div className="resume-controls-right">
-            <button 
-              className="resume-control-btn" 
-              onClick={handleReset} 
-              disabled={!pdfBlobUrl}
-              title="Reset Zoom"
-              aria-label="Reset Zoom"
+            {/* Reload: resets zoom AND re-fetches image + PDF */}
+            <button
+              className="resume-control-btn"
+              onClick={handleReset}
+              title="Reload &amp; Reset Zoom"
+              aria-label="Reload and Reset Zoom"
             >
               <RotateCw size={15} />
             </button>
+
             {pdfBlobUrl ? (
-              <a 
-                href={pdfBlobUrl} 
-                download="Preetham_Resume.pdf" 
+              <a
+                href={pdfBlobUrl}
+                download="Preetham_Resume.pdf"
                 className="resume-download-link-btn"
                 title="Download PDF"
                 aria-label="Download PDF"
@@ -180,22 +191,24 @@ export default function Resume() {
           </div>
         </div>
 
-        {/* Bottom image displayer */}
+        {/* Bottom image displayer — no fixed height; shows full image */}
         <div className="resume-viewer-display" ref={containerRef}>
           {pdfBlobUrl ? (
-            <div 
+            <div
               className="resume-image-wrapper"
-              style={{ 
+              style={{
                 padding: '40px',
-                width: `${zoom}%`,
+                /* Each 1% of zoom = 2px extra width beyond the base 100% */
+                width: `calc(100% + ${(zoom - 100) * 2}px)`,
                 maxWidth: 'none',
-                transition: 'width 0.1s ease-out'
+                transition: 'width 0.15s cubic-bezier(0.4, 0, 0.2, 1)',
               }}
             >
-              <img 
-                src="https://pub-64eaf935fdac4b6bae628841ce7c1e12.r2.dev/PreethamDev_page.jpg" 
-                alt="Preetham Maddula Resume" 
-                className="resume-image" 
+              <img
+                key={imgKey}
+                src={`${IMAGE_URL}?v=${imgKey}`}
+                alt="Preetham Maddula Resume"
+                className="resume-image"
               />
             </div>
           ) : (

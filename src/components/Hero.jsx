@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { useTheme } from '../context/ThemeContext';
 import { RotateCw } from 'lucide-react';
 import './Hero.css';
@@ -38,6 +39,10 @@ export default function Hero() {
             </svg>
             Get in touch
           </a>
+          {/* Resume button — only visible on mobile when nav-center hides */}
+          <Link to="/resume" className="btn btn-outline hero-resume-btn-mobile">
+            Resume
+          </Link>
         </div>
       </div>
 
