@@ -1,10 +1,13 @@
 import { useState, useEffect } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import { useTheme } from '../context/ThemeContext';
 import './Navbar.css';
 
 export default function Navbar() {
   const { theme, toggleTheme } = useTheme();
   const [scrolled, setScrolled] = useState(false);
+  const location = useLocation();
+  const isHome = location.pathname === '/';
 
   useEffect(() => {
     const handleScroll = () => {
@@ -23,7 +26,7 @@ export default function Navbar() {
     <nav className={`navbar ${scrolled ? 'scrolled' : ''}`}>
       {/* Left section */}
       <div className="nav-left">
-        <div className="logo">Zerion</div>
+        <Link to="/" className="logo">Zerion</Link>
         <div className="location-badge">
           Narsapur ☁ 34°
           <svg className="location-pin-icon" xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -35,9 +38,13 @@ export default function Navbar() {
 
       {/* Center section */}
       <div className="nav-center">
-        <a href="#projects" className="nav-link">Projects</a>
+        {isHome ? (
+          <a href="#projects" className="nav-link">Projects</a>
+        ) : (
+          <Link to="/#projects" className="nav-link">Projects</Link>
+        )}
         <a href="#blogs" className="nav-link">Blogs</a>
-        <a href="#resume" className="nav-link">Resume</a>
+        <Link to="/resume" className="nav-link">Resume</Link>
       </div>
 
       {/* Right section */}

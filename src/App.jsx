@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import Lenis from 'lenis';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { Routes, Route, useLocation } from 'react-router-dom';
 
 import Navbar from './components/Navbar';
 import Separator from './components/Separator';
@@ -14,11 +15,14 @@ import PreUI from './components/PreUI';
 import Contact from './components/Contact';
 import GitHubGraph from './components/GitHubGraph';
 import SkillsScroll from './components/SkillsScroll';
+import Resume from './components/Resume';
 
 // Register ScrollTrigger once at module level so Works.jsx can also rely on it
 gsap.registerPlugin(ScrollTrigger);
 
 function App() {
+  const location = useLocation();
+
   /* ── Global smooth scroll (Lenis + GSAP ticker) ────────────── */
   useEffect(() => {
     const lenis = new Lenis({
@@ -40,84 +44,130 @@ function App() {
     };
   }, []);
 
+  /* ── Scroll/Hash Router Sync ───────────────────────────────── */
+  useEffect(() => {
+    const hash = location.hash;
+    if (hash) {
+      const element = document.getElementById(hash.slice(1));
+      if (element) {
+        const timer = setTimeout(() => {
+          element.scrollIntoView({ behavior: 'smooth' });
+        }, 150);
+        return () => clearTimeout(timer);
+      }
+    } else {
+      window.scrollTo(0, 0);
+    }
+  }, [location.pathname, location.hash]);
+
   return (
     <>
       <Navbar />
 
-      {/* ── Constrained centre column (existing sections) ─────── */}
-      <div className="layout-container">
-        <div className="hero-banner-wrapper">
-          <img src="/banner.png" alt="Hero background" className="hero-banner-img" />
-          <div className="hero-banner-fade"></div>
-        </div>
+      <Routes>
+        {/* Homepage Route */}
+        <Route path="/" element={
+          <>
+            {/* ── Constrained centre column (existing sections) ─────── */}
+            <div className="layout-container">
+              <div className="hero-banner-wrapper">
+                <img src="/banner.png" alt="Hero background" className="hero-banner-img" />
+                <div className="hero-banner-fade"></div>
+              </div>
 
-        <div className="nav-placeholder" />
+              <div className="nav-placeholder" />
 
-        <div className="separator-full-width">
-          <Separator />
-        </div>
+              <div className="separator-full-width">
+                <Separator />
+              </div>
 
-        <main>
-          <Hero />
+              <main>
+                <Hero />
 
-          <div className="separator-full-width">
-            <Separator />
+                <div className="separator-full-width">
+                  <Separator />
+                </div>
+
+                <About />
+
+                {/* SKILL STACK section label */}
+                <div className="section-separator">
+                  <span className="section-label">SKILL STACK</span>
+                  <div className="section-line"></div>
+                </div>
+
+                <SkillStack />
+
+                <div className="separator-full-width">
+                  <Separator />
+                </div>
+
+                {/* SPONSORS section label */}
+                <div className="section-separator">
+                  <span className="section-label">SPONSORS</span>
+                  <div className="section-line"></div>
+                </div>
+
+                <Sponsorship />
+
+                <div className="separator-full-width">
+                  <Separator />
+                </div>
+              </main>
+            </div>
+
+            {/* ── Works — full-width, outside the 1000 px column ─────── */}
+            <Works />
+
+            {/* ── Standard middle column pattern resumes below Works ──── */}
+            <div className="layout-container">
+              <div className="separator-full-width">
+                <Separator />
+              </div>
+              <main>
+                <PreUI />
+                
+                <div className="separator-full-width">
+                  <Separator />
+                </div>
+                
+                <Contact />
+
+                <SkillsScroll />
+
+                <GitHubGraph />
+
+                <div className="separator-full-width">
+                  <Separator />
+                </div>
+              </main>
+            </div>
+          </>
+        } />
+
+        {/* Resume Page Route */}
+        <Route path="/resume" element={
+          <div className="layout-container">
+            <div className="nav-placeholder" />
+            
+            <div className="separator-full-width">
+              <Separator />
+            </div>
+
+            <main>
+              <Resume />
+              
+              <SkillsScroll />
+
+              <GitHubGraph />
+
+              <div className="separator-full-width">
+                <Separator />
+              </div>
+            </main>
           </div>
-
-          <About />
-
-          {/* SKILL STACK section label */}
-          <div className="section-separator">
-            <span className="section-label">SKILL STACK</span>
-            <div className="section-line"></div>
-          </div>
-
-          <SkillStack />
-
-          <div className="separator-full-width">
-            <Separator />
-          </div>
-
-          {/* SPONSORS section label */}
-          <div className="section-separator">
-            <span className="section-label">SPONSORS</span>
-            <div className="section-line"></div>
-          </div>
-
-          <Sponsorship />
-
-          <div className="separator-full-width">
-            <Separator />
-          </div>
-        </main>
-      </div>
-
-      {/* ── Works — full-width, outside the 1000 px column ─────── */}
-      <Works />
-
-      {/* ── Standard middle column pattern resumes below Works ──── */}
-      <div className="layout-container">
-        <div className="separator-full-width">
-          <Separator />
-        </div>
-        <main>
-          <PreUI />
-          
-          <div className="separator-full-width">
-            <Separator />
-          </div>
-          
-          <Contact />
-
-          <SkillsScroll />
-
-          <GitHubGraph />
-
-          <div className="separator-full-width">
-            <Separator />
-          </div>
-        </main>
-      </div>
+        } />
+      </Routes>
     </>
   );
 }
