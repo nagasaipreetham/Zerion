@@ -17,12 +17,17 @@ import GitHubGraph from './components/GitHubGraph';
 import SkillsScroll from './components/SkillsScroll';
 import Resume from './components/Resume';
 import SectionNavigator from './components/SectionNavigator';
+import PlayersSandbox from './components/PlayersSandbox';
+import VintageDarkPlayer from './components/vintage-dark/VintageDarkPlayer';
+import VintageLightPlayer from './components/vintage-light/VintageLightPlayer';
+import { useTheme } from './context/ThemeContext';
 
 // Register ScrollTrigger once at module level so Works.jsx can also rely on it
 gsap.registerPlugin(ScrollTrigger);
 
 function App() {
   const location = useLocation();
+  const { theme } = useTheme();
 
   /* ── Global smooth scroll (Lenis + GSAP ticker) ──────────────── */
   useEffect(() => {
@@ -166,6 +171,9 @@ function App() {
 
                 <div id="footer">
                   <GitHubGraph />
+                  <div className="portfolio-turntable-container">
+                    {theme === 'dark' ? <VintageDarkPlayer /> : <VintageLightPlayer />}
+                  </div>
                 </div>
 
                 <div className="separator-full-width">
@@ -198,6 +206,9 @@ function App() {
             </main>
           </div>
         } />
+
+        {/* Sandbox Route */}
+        <Route path="/sandbox" element={<PlayersSandbox />} />
       </Routes>
     </>
   );

@@ -1,0 +1,488 @@
+/* Vintage Light Wood Turntable - Skeuomorphic & High Realism Styles */
+.vintage-light-player {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  background: #f2efeb; /* matched to portfolio light background */
+}
+
+/* Base casing styled to look like a heavy, solid chamfered slab of matte composite/brushed material */
+.vintage-light-base {
+  position: relative;
+  width: 380px; /* kept exact size */
+  height: 480px; /* kept exact size */
+  background: linear-gradient(145deg, #232328 0%, #15151a 50%, #0b0b0f 100%); /* Deep rich black base */
+  border-radius: 20px;
+  box-shadow: 
+    0 40px 90px rgba(0, 0, 0, 0.75), /* Outer ambient drop shadow */
+    0 20px 45px rgba(0, 0, 0, 0.5),  /* Solid shadow close to base */
+    0 3px 8px rgba(0, 0, 0, 0.3),    /* Contact shadow at the bottom edge */
+    inset 0 3px 5px rgba(255, 255, 255, 0.08), /* Upper highlight edge */
+    inset 0 -4px 8px rgba(0, 0, 0, 0.6);       /* Lower recessed edge shadow */
+  padding: 40px;
+  animation: vintageLightAppear 1s ease-out;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.02);
+}
+
+@keyframes vintageLightAppear {
+  from {
+    opacity: 0;
+    transform: perspective(800px) rotateX(-10deg) translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: perspective(800px) rotateX(0deg) translateY(0);
+  }
+}
+
+/* Parallel brushed vertical/horizontal micro-texture lines */
+.vintage-light-wood-texture {
+  position: absolute;
+  inset: 0;
+  background-image: 
+    repeating-linear-gradient(
+      90deg,
+      transparent 0px,
+      transparent 2px,
+      rgba(255, 255, 255, 0.02) 2px,
+      rgba(255, 255, 255, 0.02) 4px
+    ),
+    repeating-linear-gradient(
+      0deg,
+      rgba(0, 0, 0, 0.35) 0px,
+      rgba(255, 255, 255, 0.01) 40px,
+      rgba(0, 0, 0, 0.35) 80px
+    );
+  border-radius: 16px;
+  opacity: 0.65;
+  pointer-events: none;
+  mix-blend-mode: overlay;
+}
+
+/* Corner Screws - high detail skeuomorphic chrome screw */
+.vintage-light-screw {
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at 35% 35%,
+    #ffffff 0%,
+    #a1a1aa 45%,
+    #52525b 75%,
+    #27272a 100%
+  );
+  box-shadow: 
+    inset 0 1.5px 3px rgba(255, 255, 255, 0.5),
+    inset 0 -1.5px 3px rgba(0, 0, 0, 0.6),
+    0 3px 6px rgba(0, 0, 0, 0.6),
+    0 1px 2px rgba(0, 0, 0, 0.4);
+}
+
+.vintage-light-screw::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 10px;
+  height: 2px;
+  background: rgba(0, 0, 0, 0.75);
+  box-shadow: 
+    0 -5px 0 rgba(0, 0, 0, 0.75),
+    0 1px 1px rgba(255, 255, 255, 0.15);
+}
+
+.vintage-light-screw-tl { top: 15px; left: 15px; }
+.vintage-light-screw-tr { top: 15px; right: 15px; }
+.vintage-light-screw-bl { bottom: 15px; left: 15px; }
+.vintage-light-screw-br { bottom: 15px; right: 15px; }
+
+/* Platter Rim (Underneath the Vinyl Record to give it true physical height) */
+.vintage-light-vinyl-wrapper {
+  position: absolute;
+  top: 35px;
+  left: 30px; /* kept exact position */
+  width: 300px;
+  height: 300px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0;
+  border-radius: 50%;
+  /* Machined metal platter base */
+  background: radial-gradient(circle, #2d3139 50%, #1c1c1f 85%, #3f434c 98%, #141416 100%);
+  border: 1.5px solid #141416;
+  box-shadow: 
+    0 18px 45px rgba(0, 0, 0, 0.55), 
+    0 8px 18px rgba(0, 0, 0, 0.4),
+    inset 0 3px 6px rgba(255, 255, 255, 0.1),
+    inset 0 -3px 6px rgba(0, 0, 0, 0.6);
+}
+
+/* Vinyl record colored to match portfolio light mode background #f2efeb */
+.vintage-light-vinyl {
+  position: relative;
+  width: 96%; /* slightly smaller than wrapper to expose the metal platter rim */
+  height: 96%;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, #ffffff 0%, #f2efeb 65%, #ded9d0 100%);
+  box-shadow: 
+    0 8px 20px rgba(0, 0, 0, 0.45), /* Drop shadow onto the platter */
+    inset 0 0 15px rgba(255, 255, 255, 0.8),
+    inset 0 -4px 10px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+}
+
+/* Grooves styled to contrast softly on the sand-colored vinyl */
+.vintage-light-grooves {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: repeating-radial-gradient(
+    circle at center,
+    transparent 0px,
+    transparent 2px,
+    rgba(0, 0, 0, 0.02) 2px,
+    rgba(0, 0, 0, 0.02) 4px
+  );
+  opacity: 0.95;
+}
+
+/* Gloss reflection overlay */
+.vintage-light-reflection {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: linear-gradient(
+    135deg,
+    transparent 20%,
+    rgba(255, 255, 255, 0.35) 40%,
+    transparent 60%
+  );
+  animation: vintageLightShimmer 12s linear infinite;
+  opacity: 0.65;
+  mix-blend-mode: overlay;
+}
+
+@keyframes vintageLightShimmer {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Center Label with high contrast polished rim */
+.vintage-light-center-label {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 116px; /* kept exact size */
+  height: 116px; /* kept exact size */
+  border-radius: 50%;
+  background: linear-gradient(135deg, #ffffff 0%, #fdfcf9 100%);
+  box-shadow: 
+    0 4px 15px rgba(0, 0, 0, 0.25),
+    inset 0 2px 4px rgba(255, 255, 255, 0.8),
+    inset 0 -2px 5px rgba(0, 0, 0, 0.08);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1.5px solid #dcd8d0; /* Soft polished metal rim */
+}
+
+/* Album Art */
+.vintage-light-album-art {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  overflow: hidden;
+  box-shadow: 
+    0 3px 12px rgba(0, 0, 0, 0.2),
+    inset 0 0 0 1px rgba(0, 0, 0, 0.08);
+}
+
+.vintage-light-album-art img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: contrast(1.05) brightness(0.98);
+}
+
+/* Chrome Metal Spindle */
+.vintage-light-spindle {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at 30% 30%, 
+    #ffffff 0%, 
+    #a1a1aa 50%, 
+    #52525b 90%,
+    #27272a 100%
+  );
+  box-shadow: 
+    2px 3px 6px rgba(0, 0, 0, 0.4), /* realistic peg shadow */
+    inset 0 1px 2px rgba(255, 255, 255, 0.8);
+}
+
+/* Tonearm Wrapper (Placed in bottom right corner) */
+.vintage-light-tonearm-wrapper {
+  position: absolute;
+  right: 55px; /* kept exact position */
+  bottom: 55px; /* kept exact position */
+  width: 40px;
+  height: 40px;
+  transform: rotate(-75deg); /* Points arm up-right initially, off record */
+  z-index: 10;
+}
+
+.vintage-light-tonearm {
+  position: absolute;
+  left: 0;
+  top: -20px; /* Shifted vertically to contain the bent pipe within the click box */
+  width: 200px; /* kept exact size */
+  height: 80px; /* Expanded height to cover full sweep of the bent arm structure */
+  transform-origin: 20px 40px; /* Pivot centered at the arm base cylinder */
+  cursor: pointer;
+  transition: filter 0.3s ease;
+}
+
+.vintage-light-tonearm:hover {
+  filter: drop-shadow(0 4px 10px rgba(255, 255, 255, 0.15));
+}
+
+/* Arm Base Button - colored to match portfolio light background #f2efeb with shading, bezel, and heavy depth */
+.vintage-light-arm-base {
+  position: absolute;
+  left: 0;
+  top: 20px; /* Centered inside the new 80px height container */
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #ffffff 0%, #f2efeb 65%, #c8c3ba 100%);
+  box-shadow: 
+    0 10px 20px rgba(0, 0, 0, 0.45),
+    0 3px 6px rgba(0, 0, 0, 0.25),
+    inset 0 2px 3px #ffffff,
+    inset 0 -3px 5px rgba(0, 0, 0, 0.15);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+/* SVG Bent Arm Structure styles (Sharp angle bend in middle) */
+.vintage-light-arm-structure {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 200px;
+  height: 80px;
+  /* Removed pointer-events: none and translateY to expand the hover area across the entire arm shape */
+}
+
+.vintage-light-arm-svg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.5)); /* Stronger realistic drop shadow on dark base */
+}
+
+/* Metallic Joint cap */
+.vintage-light-arm-connector {
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, #ffffff 0%, #f2efeb 60%, #beb9b0 100%);
+  box-shadow: 
+    0 3px 6px rgba(0, 0, 0, 0.35),
+    inset 0 1px 2px #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+/* Needle head/cartridge styled as a physical cream shell cartridge */
+.vintage-light-arm-head {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  background: linear-gradient(135deg, #ffffff 0%, #f2efeb 60%, #d5d0c7 100%); /* white/sand head */
+  border-radius: 50%;
+  box-shadow: 
+    0 5px 10px rgba(0, 0, 0, 0.45),
+    inset 0 1px 2px #ffffff;
+  border: 1px solid #c8c3ba;
+}
+
+/* Knob Section (Placed in bottom left corner) */
+.vintage-light-knob-section {
+  position: absolute;
+  left: 55px; /* kept exact position */
+  bottom: 40px; /* kept exact position */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Machined volume knob styled with portfolio background color #f2efeb, heavy shadows, and bezel details */
+.vintage-light-knob {
+  width: 60px; /* kept exact size */
+  height: 60px; /* kept exact size */
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at 35% 35%, 
+    #ffffff 0%, 
+    #f2efeb 40%, 
+    #d1cdc7 75%,
+    #a6a198 100%
+  );
+  box-shadow: 
+    0 12px 25px rgba(0, 0, 0, 0.5), /* Deep ambient drop shadow */
+    0 4px 8px rgba(0, 0, 0, 0.35),  /* Hard contact shadow */
+    inset 0 2px 3px #ffffff,        /* Machined edge shine */
+    inset 0 -3px 5px rgba(0, 0, 0, 0.2); /* Recessed inner shadow */
+  cursor: grab;
+  transition: transform 0.2s ease;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1.5px solid rgba(0, 0, 0, 0.12); /* Machined outer dial metal boundary */
+}
+
+.vintage-light-knob:hover {
+  transform: scale(1.04);
+  box-shadow: 
+    0 15px 30px rgba(0, 0, 0, 0.55),
+    0 6px 12px rgba(0, 0, 0, 0.4),
+    inset 0 2px 3px #ffffff;
+}
+
+.vintage-light-knob:active {
+  cursor: grabbing;
+  transform: scale(0.97);
+}
+
+/* Concentric micro-machined texture circles inside the knob center */
+.vintage-light-knob-center {
+  position: relative;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: repeating-radial-gradient(
+    circle,
+    #ffffff 0px,
+    #ffffff 1px,
+    #f2efeb 2px,
+    #eae5df 3px,
+    #eae5df 4px
+  ); 
+  border: 1px solid #d1cdc7;
+  box-shadow: 
+    inset 0 2px 5px rgba(0, 0, 0, 0.15),
+    inset 0 -1.5px 2px rgba(255, 255, 255, 0.8),
+    0 1px 2px rgba(0, 0, 0, 0.1);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Machined pointer indicator (engraved slot look) */
+.vintage-light-knob-indicator {
+  position: absolute;
+  top: 5px;
+  width: 2px;
+  height: 11px;
+  background: #52525b; /* dark indicator slot */
+  border-radius: 1px;
+  box-shadow: 
+    inset 0.5px 0.5px 1px rgba(0, 0, 0, 0.4),
+    0.5px 0.5px 0.5px rgba(255, 255, 255, 0.8);
+}
+
+/* LED Power Indicator (Placed in bottom center) */
+.vintage-light-led-section {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 60px; /* kept exact position */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Recessed metal socket bezel for the LED status light */
+.vintage-light-led {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #18181b;
+  border: 2px solid #52525b; /* recessed dark silver bezel */
+  box-shadow: 
+    inset 0 2px 4px rgba(0, 0, 0, 0.85),
+    0 1px 1.5px rgba(255, 255, 255, 0.06);
+  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Glowing active state with real lens-flare light dispersion */
+.vintage-light-led.active {
+  background: radial-gradient(circle at 35% 35%, #ffffff 0%, #a78bfa 40%, #7c3aed 100%); /* light purple glow lens */
+  border-color: #3f3f46;
+  box-shadow: 
+    inset 0 1px 2px rgba(255, 255, 255, 0.55),
+    0 0 4px rgba(124, 58, 237, 1),
+    0 0 15px rgba(124, 58, 237, 0.85),
+    0 0 30px rgba(124, 58, 237, 0.4);
+  animation: vintageLightPulse 2s ease-in-out infinite;
+}
+
+@keyframes vintageLightPulse {
+  0%, 100% { 
+    opacity: 1; 
+    filter: drop-shadow(0 0 2px rgba(124, 58, 237, 0.4));
+  }
+  50% { 
+    opacity: 0.85; 
+    filter: drop-shadow(0 0 6px rgba(124, 58, 237, 0.8));
+  }
+}
+
+/* Responsive constraints maintained */
+@media (max-width: 768px) {
+  .vintage-light-base {
+    width: 95vw;
+    max-width: 380px;
+    height: 420px;
+    padding: 20px;
+  }
+
+  .vintage-light-vinyl-wrapper {
+    width: 240px;
+    height: 240px;
+    top: 20px;
+    left: calc((100% - 240px) / 2);
+  }
+
+  .vintage-light-knob-section {
+    left: 30px;
+    bottom: 25px;
+  }
+  
+  .vintage-light-knob {
+    width: 50px;
+    height: 50px;
+  }
+  
+  .vintage-light-knob-center {
+    width: 34px;
+    height: 34px;
+  }
+
+  .vintage-light-tonearm-wrapper {
+    right: 30px;
+    bottom: 45px;
+  }
+
+  .vintage-light-led-section {
+    bottom: 45px;
+  }
+}
