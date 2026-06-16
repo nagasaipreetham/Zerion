@@ -24,38 +24,31 @@ export default function SectionNavigator() {
 
   // ── Track viewport scroll to update active section ─────────────────
   useEffect(() => {
-    const elements = SECTIONS.map(s => document.getElementById(s.id)).filter(Boolean);
-
     const checkActive = () => {
-      const centerY = window.innerHeight / 2;
-      let foundActive = null;
+      // Query sections dynamically on scroll to prevent stale references or mounting delay issues
+      const elements = SECTIONS.map(s => document.getElementById(s.id)).filter(Boolean);
+      const viewportHeight = window.innerHeight;
+      
+      let maxVisibleHeight = -1;
+      let activeId = null;
 
-      for (const el of elements) {
+      elements.forEach(el => {
         const rect = el.getBoundingClientRect();
-        // Check if the center Y coordinate of the screen is inside the section's vertical bounds
-        if (rect.top <= centerY && rect.bottom >= centerY) {
-          foundActive = el.id;
-          break;
+        
+        // Calculate the height bounds of the element visible in the viewport
+        const visibleTop = Math.max(0, rect.top);
+        const visibleBottom = Math.min(viewportHeight, rect.bottom);
+        const visibleHeight = Math.max(0, visibleBottom - visibleTop);
+
+        // Track the section with the largest visible presence on screen
+        if (visibleHeight > maxVisibleHeight) {
+          maxVisibleHeight = visibleHeight;
+          activeId = el.id;
         }
-      }
+      });
 
-      // Fallback: If no section bounds contain centerY (e.g. extreme top/bottom scroll),
-      // choose the one closest to the viewport center Y
-      if (!foundActive) {
-        let minDistance = Infinity;
-        elements.forEach(el => {
-          const rect = el.getBoundingClientRect();
-          const elementCenter = (rect.top + rect.bottom) / 2;
-          const dist = Math.abs(elementCenter - centerY);
-          if (dist < minDistance) {
-            minDistance = dist;
-            foundActive = el.id;
-          }
-        });
-      }
-
-      if (foundActive) {
-        setActiveSection(foundActive);
+      if (activeId) {
+        setActiveSection(activeId);
       }
     };
 
@@ -77,11 +70,27 @@ export default function SectionNavigator() {
 
     // Resolve target element if pinned by GSAP ScrollTrigger
     const target = element.closest('.pin-spacer') || element;
+    const rect = target.getBoundingClientRect();
+    const elementTop = rect.top + window.scrollY;
+    const elementHeight = rect.height;
+
+    let targetScrollY;
+    if (id === 'hero') {
+      targetScrollY = 0;
+    } else if (id === 'footer') {
+      targetScrollY = document.documentElement.scrollHeight - window.innerHeight;
+    } else if (elementHeight > window.innerHeight) {
+      // If the section is taller than the screen height (like Works), align to its top with nav offset
+      targetScrollY = elementTop - 80;
+    } else {
+      // Align target vertically centered in the viewport
+      targetScrollY = elementTop - (window.innerHeight - elementHeight) / 2;
+    }
 
     if (window.__lenis) {
-      window.__lenis.scrollTo(target, { offset: -80, duration: 1.2 });
+      window.__lenis.scrollTo(targetScrollY, { duration: 1.2 });
     } else {
-      target.scrollIntoView({ behavior: 'smooth' });
+      window.scrollTo({ top: targetScrollY, behavior: 'smooth' });
     }
   };
 
