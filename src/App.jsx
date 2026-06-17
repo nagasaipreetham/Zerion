@@ -17,6 +17,7 @@ import GitHubGraph from './components/GitHubGraph';
 import SkillsScroll from './components/SkillsScroll';
 import Resume from './components/Resume';
 import SectionNavigator from './components/SectionNavigator';
+import FloatingBottomMenu from './components/FloatingBottomMenu';
 import VintagePlayer from './components/vintage-player/VintagePlayer';
 import { useTheme } from './context/ThemeContext';
 
@@ -100,6 +101,7 @@ function App() {
         <Route path="/" element={
           <>
             <SectionNavigator />
+            <FloatingBottomMenu />
             {/* ── Constrained centre column (existing sections) ─────── */}
             <div className="layout-container">
               <div className="hero-banner-wrapper">

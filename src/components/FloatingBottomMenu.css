@@ -1,0 +1,204 @@
+/* ═══════════════════════════════════════════════════════════════
+   FLOATING BOTTOM MENU (MOBILE NAVIGATION)
+   Pill-shaped glassmorphic navigator fixed at the bottom edge
+   ═══════════════════════════════════════════════════════════════ */
+
+.floating-bottom-nav {
+  display: none;
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 999;
+  user-select: none;
+  touch-action: none;
+  max-width: calc(100% - 32px);
+  width: fit-content;
+}
+
+/* Container bar - glassmorphic rounded capsule */
+.floating-menu-bar {
+  display: flex;
+  align-items: center;
+  border-radius: 9999px;
+  position: relative;
+  box-sizing: border-box;
+  padding: 6px 12px;
+  height: 44px;
+}
+
+/* Left section - name of the active section (fixed width to prevent layout shifts)
+   Width has been reduced by 20% (from 24vw / 95px to 19.2vw / 76px) to optimize screen space
+   while still accommodating the longest label "SPONSORS" */
+.floating-menu-left {
+  width: 19.2vw;
+  min-width: 76px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+}
+
+.floating-menu-active-label {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  color: var(--text-color);
+  text-align: center;
+  white-space: nowrap;
+  animation: labelFade 0.25s ease-out;
+}
+
+@keyframes labelFade {
+  from {
+    opacity: 0;
+    transform: translateY(2px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Thin vertical divider that does not touch outer borders */
+.floating-menu-divider {
+  width: 1px;
+  height: 18px; /* does not touch the borders */
+  margin: 0 12px;
+  background-color: rgba(0, 0, 0, 0.15);
+  transition: background-color 0.3s ease;
+}
+
+.dark .floating-menu-divider {
+  background-color: rgba(255, 255, 255, 0.15);
+}
+
+/* Right section - dot buttons + mother pill highlight */
+.floating-menu-right {
+  display: flex;
+  align-items: center;
+  position: relative;
+  box-sizing: border-box;
+  gap: 2px;
+  height: 100%;
+}
+
+/* Draggable background capsule highlight (The Mother Pill) */
+.floating-menu-pill {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  height: 22px; /* reduced height/padding inside mother pill */
+  border-radius: 9999px;
+  z-index: 0;
+  pointer-events: none;
+  transition: left 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+  box-sizing: border-box;
+}
+
+.dark .floating-menu-pill {
+  background-color: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+.floating-menu-pill {
+  background-color: rgba(0, 0, 0, 0.06);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+/* Disable transition on drag interaction */
+.floating-menu-right.dragging .floating-menu-pill {
+  transition: none !important;
+}
+
+/* Dot buttons */
+.floating-menu-dot-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  height: 32px;
+  width: 24px; /* fixed size, no layout shifting */
+  z-index: 2;
+  outline: none;
+  box-sizing: border-box;
+  padding: 0;
+}
+
+/* Capsule Dot styling (Default/Inactive) */
+.dot-pill-shape {
+  display: block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  transition: 
+    width 0.3s cubic-bezier(0.25, 1, 0.5, 1), 
+    height 0.3s cubic-bezier(0.25, 1, 0.5, 1),
+    border-radius 0.3s cubic-bezier(0.25, 1, 0.5, 1),
+    background-color 0.3s ease,
+    opacity 0.3s ease;
+  flex-shrink: 0;
+  opacity: 0.35;
+}
+
+.dark .dot-pill-shape {
+  background-color: #ffffff; /* White in dark theme */
+}
+
+.dot-pill-shape {
+  background-color: #000000; /* Black in light theme */
+}
+
+/* Active Dot Morphing (Becomes a small horizontal pill) */
+.floating-menu-dot-btn.active .dot-pill-shape {
+  width: 14px;
+  height: 4px;
+  border-radius: 2px;
+  opacity: 1;
+}
+
+.dark .floating-menu-dot-btn.active .dot-pill-shape {
+  background-color: #ffffff;
+}
+
+.floating-menu-dot-btn.active .dot-pill-shape {
+  background-color: #000000;
+}
+
+/* Hover/active indicator focus rings (accessibility) */
+.floating-menu-dot-btn:focus-visible {
+  outline: 1.5px solid var(--text-color);
+  opacity: 1;
+}
+
+/* Glassmorphic values for dark/light themes */
+.dark .floating-menu-bar {
+  background-color: rgba(26, 26, 26, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+}
+
+.floating-menu-bar {
+  background-color: rgba(242, 239, 235, 0.75);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+}
+
+/* Responsive display - Show under max-width 1024px when sidebar navigator hides */
+@media (max-width: 1024px) {
+  .floating-bottom-nav {
+    display: block;
+  }
+  
+  /* Add constant padding to page bottom to prevent floating menu from covering content */
+  body.has-floating-menu {
+    padding-bottom: 100px;
+  }
+}

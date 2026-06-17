@@ -47,14 +47,15 @@ body {
   background-size: 150px 150px;
   background-position: center top;
 
-  /* Hide scrollbar for IE and Firefox */
-  -ms-overflow-style: none;
-  scrollbar-width: none;
 }
 
-/* Hide scrollbar for Chrome, Safari and Opera */
-body::-webkit-scrollbar {
-  display: none;
+/* Hide scrollbars globally for all elements (Firefox, IE/Edge, Chrome/Safari/Opera) */
+* {
+  scrollbar-width: none !important;
+  -ms-overflow-style: none !important;
+}
+*::-webkit-scrollbar {
+  display: none !important;
 }
 
 /* View Transitions for Theme Toggle */
