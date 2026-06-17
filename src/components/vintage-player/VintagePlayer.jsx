@@ -3,7 +3,7 @@ import gsap from 'gsap';
 import './VintagePlayer.css';
 
 const VintagePlayer = ({ theme = 'dark' }) => {
-  const [isPlaying, setIsPlaying] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(true);
   const [volume, setVolume] = useState(0.7);
   const [isDraggingKnob, setIsDraggingKnob] = useState(false);
   const [scale, setScale] = useState(1);
@@ -15,12 +15,67 @@ const VintagePlayer = ({ theme = 'dark' }) => {
   const knobRef = useRef(null);
   const containerRef = useRef(null);
 
+  // Sync volume with audio component
   useEffect(() => {
     if (audioRef.current) {
       audioRef.current.volume = volume;
     }
   }, [volume]);
 
+  // Initial load: Set initial tonearm angle, attempt play, and register user gesture listeners for autoplay bypass
+  useEffect(() => {
+    // 1. Force the tonearm to be on the disk instantly by default on mount
+    if (tonearmRef.current) {
+      gsap.set(tonearmRef.current, { rotation: -15 });
+    }
+
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    let interactionListenersRegistered = false;
+
+    const startAudioOnInteraction = () => {
+      if (audio.paused) {
+        audio.play()
+          .then(() => {
+            removeInteractionListeners();
+          })
+          .catch((err) => {
+            console.warn("Playback failed on interaction:", err);
+          });
+      } else {
+        removeInteractionListeners();
+      }
+    };
+
+    const removeInteractionListeners = () => {
+      if (interactionListenersRegistered) {
+        window.removeEventListener('click', startAudioOnInteraction);
+        window.removeEventListener('keydown', startAudioOnInteraction);
+        window.removeEventListener('touchstart', startAudioOnInteraction);
+        window.removeEventListener('mousedown', startAudioOnInteraction);
+        interactionListenersRegistered = false;
+      }
+    };
+
+    // Try playing immediately on load
+    audio.play()
+      .catch((err) => {
+        console.warn("Initial autoplay blocked. Registering interaction listeners...", err);
+        // Fallback: play on first click, keypress, touch, or mouse press
+        window.addEventListener('click', startAudioOnInteraction);
+        window.addEventListener('keydown', startAudioOnInteraction);
+        window.addEventListener('touchstart', startAudioOnInteraction);
+        window.addEventListener('mousedown', startAudioOnInteraction);
+        interactionListenersRegistered = true;
+      });
+
+    return () => {
+      removeInteractionListeners();
+    };
+  }, []);
+
+  // Vinyl continuous rotation layout initialization
   useEffect(() => {
     if (vinylRef.current) {
       rotationRef.current = gsap.to(vinylRef.current, {
@@ -38,6 +93,42 @@ const VintagePlayer = ({ theme = 'dark' }) => {
       }
     };
   }, []);
+
+  // Sync visual tonearm rotation, vinyl animation state, and audio element with isPlaying state
+  useEffect(() => {
+    const tonearm = tonearmRef.current;
+    if (!tonearm) return;
+
+    if (isPlaying) {
+      // Move tonearm to disk
+      gsap.to(tonearm, {
+        rotation: -15,
+        duration: 0.7,
+        ease: "power2.inOut"
+      });
+      // Play vinyl rotation
+      if (rotationRef.current) rotationRef.current.play();
+      // Play audio element
+      if (audioRef.current && audioRef.current.paused) {
+        audioRef.current.play().catch((err) => {
+          console.warn("Audio play failed on isPlaying state change:", err);
+        });
+      }
+    } else {
+      // Move tonearm back off disk
+      gsap.to(tonearm, {
+        rotation: 0,
+        duration: 0.7,
+        ease: "power2.inOut"
+      });
+      // Pause vinyl rotation
+      if (rotationRef.current) rotationRef.current.pause();
+      // Pause audio element
+      if (audioRef.current && !audioRef.current.paused) {
+        audioRef.current.pause();
+      }
+    }
+  }, [isPlaying]);
 
   useEffect(() => {
     const container = containerRef.current;
@@ -59,32 +150,7 @@ const VintagePlayer = ({ theme = 'dark' }) => {
   }, []);
 
   const handleTonearmClick = () => {
-    const tonearm = tonearmRef.current;
-    if (!tonearm) return;
-
-    if (!isPlaying) {
-      gsap.to(tonearm, {
-        rotation: -15,
-        duration: 0.7,
-        ease: "power2.inOut",
-        onComplete: () => {
-          setIsPlaying(true);
-          if (audioRef.current) audioRef.current.play();
-          if (rotationRef.current) rotationRef.current.play();
-        }
-      });
-    } else {
-      gsap.to(tonearm, {
-        rotation: 0,
-        duration: 0.7,
-        ease: "power2.inOut",
-        onComplete: () => {
-          setIsPlaying(false);
-          if (audioRef.current) audioRef.current.pause();
-          if (rotationRef.current) rotationRef.current.pause();
-        }
-      });
-    }
+    setIsPlaying(prev => !prev);
   };
 
   const handleKnobMouseDown = (e) => {
@@ -203,11 +269,11 @@ const VintagePlayer = ({ theme = 'dark' }) => {
                       )}
                     </linearGradient>
                   </defs>
-                  <path 
-                    d="M 20,40 L 155,40 L 270,12" 
-                    fill="none" 
-                    stroke={`url(#pipe-grad-${theme})`} 
-                    strokeWidth="5" 
+                  <path
+                    d="M 20,40 L 155,40 L 270,12"
+                    fill="none"
+                    stroke={`url(#pipe-grad-${theme})`}
+                    strokeWidth="5"
                     strokeLinecap="round"
                     strokeLinejoin="round"
                   />
@@ -239,8 +305,9 @@ const VintagePlayer = ({ theme = 'dark' }) => {
 
       <audio
         ref={audioRef}
+        playsInline
         loop
-        src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"
+        src="https://pub-64eaf935fdac4b6bae628841ce7c1e12.r2.dev/Peaches.mp3"
       />
     </div>
   );
