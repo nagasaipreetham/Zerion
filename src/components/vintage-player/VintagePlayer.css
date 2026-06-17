@@ -1,0 +1,766 @@
+/* Vintage Turntable - Skeuomorphic & High Realism Styles */
+.vintage-player {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+/* Theme containers custom backgrounds */
+.vintage-player.theme-dark {
+  background: #1a1a1a; /* matched to portfolio dark background */
+}
+
+.vintage-player.theme-light {
+  background: #f2efeb; /* matched to portfolio light background */
+}
+
+/* Base wrapper to handle layout dimensions and animations for scaling */
+.vintage-player-base-wrapper {
+  position: relative;
+  width: 380px;
+  height: 480px;
+  flex-shrink: 0;
+}
+
+.vintage-player.theme-dark .vintage-player-base-wrapper {
+  animation: vintageDarkAppear 1s ease-out;
+}
+
+.vintage-player.theme-light .vintage-player-base-wrapper {
+  animation: vintageLightAppear 1s ease-out;
+}
+
+@keyframes vintageDarkAppear {
+  from {
+    opacity: 0;
+    transform: perspective(800px) rotateX(-10deg) translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: perspective(800px) rotateX(0deg) translateY(0);
+  }
+}
+
+@keyframes vintageLightAppear {
+  from {
+    opacity: 0;
+    transform: perspective(800px) rotateX(-10deg) translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: perspective(800px) rotateX(0deg) translateY(0);
+  }
+}
+
+/* Base casing styled as a heavy, solid slab of light cream/sand composite material */
+.vintage-player-base {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 380px;
+  height: 480px;
+  border-radius: 20px;
+  padding: 40px;
+  overflow: hidden;
+  transform-origin: top left;
+}
+
+/* Theme styling for base */
+.vintage-player.theme-dark .vintage-player-base {
+  background: linear-gradient(145deg, #ffffff 0%, #f2efeb 50%, #e2ded8 100%); /* Light Sand/White Base */
+  box-shadow: 
+    0 40px 90px rgba(0, 0, 0, 0.45), /* Outer ambient drop shadow on dark page */
+    0 20px 45px rgba(0, 0, 0, 0.3),  
+    0 3px 8px rgba(0, 0, 0, 0.25),    
+    inset 0 3px 5px rgba(255, 255, 255, 0.8), /* Upper highlight edge */
+    inset 0 -4px 8px rgba(0, 0, 0, 0.15);       /* Lower recessed edge shadow */
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.vintage-player.theme-light .vintage-player-base {
+  background: linear-gradient(145deg, #232328 0%, #15151a 50%, #0b0b0f 100%); /* Deep rich black base */
+  box-shadow: 
+    0 40px 90px rgba(0, 0, 0, 0.75), /* Outer ambient drop shadow */
+    0 20px 45px rgba(0, 0, 0, 0.5),  /* Solid shadow close to base */
+    0 3px 8px rgba(0, 0, 0, 0.3),    /* Contact shadow at the bottom edge */
+    inset 0 3px 5px rgba(255, 255, 255, 0.08), /* Upper highlight edge */
+    inset 0 -4px 8px rgba(0, 0, 0, 0.6);       /* Lower recessed edge shadow */
+  border: 1px solid rgba(255, 255, 255, 0.02);
+}
+
+/* Parallel brushed vertical/horizontal micro-texture lines */
+.vintage-player-wood-texture {
+  position: absolute;
+  inset: 0;
+  border-radius: 16px;
+  opacity: 0.65;
+  pointer-events: none;
+}
+
+.vintage-player.theme-dark .vintage-player-wood-texture {
+  background-image: 
+    repeating-linear-gradient(
+      90deg,
+      transparent 0px,
+      transparent 2px,
+      rgba(0, 0, 0, 0.02) 2px,
+      rgba(0, 0, 0, 0.02) 4px
+    ),
+    repeating-linear-gradient(
+      0deg,
+      rgba(0, 0, 0, 0.05) 0px,
+      rgba(255, 255, 255, 0.4) 40px,
+      rgba(0, 0, 0, 0.05) 80px
+    );
+  mix-blend-mode: multiply;
+}
+
+.vintage-player.theme-light .vintage-player-wood-texture {
+  background-image: 
+    repeating-linear-gradient(
+      90deg,
+      transparent 0px,
+      transparent 2px,
+      rgba(255, 255, 255, 0.02) 2px,
+      rgba(255, 255, 255, 0.02) 4px
+    ),
+    repeating-linear-gradient(
+      0deg,
+      rgba(0, 0, 0, 0.35) 0px,
+      rgba(255, 255, 255, 0.01) 40px,
+      rgba(0, 0, 0, 0.35) 80px
+    );
+  mix-blend-mode: overlay;
+}
+
+/* Corner Screws */
+.vintage-player-screw {
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+}
+
+.vintage-player-screw::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 10px;
+  height: 2px;
+}
+
+/* Theme styles for screws */
+.vintage-player.theme-dark .vintage-player-screw {
+  background: radial-gradient(
+    circle at 35% 35%,
+    #52525b 0%,
+    #27272a 45%,
+    #18181b 75%,
+    #09090b 100%
+  );
+  box-shadow: 
+    inset 0 1.5px 2px rgba(255, 255, 255, 0.1),
+    inset 0 -1.5px 2px rgba(0, 0, 0, 0.8),
+    0 2px 4px rgba(0, 0, 0, 0.25);
+}
+
+.vintage-player.theme-dark .vintage-player-screw::before {
+  background: rgba(255, 255, 255, 0.15);
+  box-shadow: 
+    0 -5px 0 rgba(255, 255, 255, 0.15),
+    0 1px 1px rgba(0, 0, 0, 0.5);
+}
+
+.vintage-player.theme-light .vintage-player-screw {
+  background: radial-gradient(
+    circle at 35% 35%,
+    #ffffff 0%,
+    #a1a1aa 45%,
+    #52525b 75%,
+    #27272a 100%
+  );
+  box-shadow: 
+    inset 0 1.5px 3px rgba(255, 255, 255, 0.5),
+    inset 0 -1.5px 3px rgba(0, 0, 0, 0.6),
+    0 3px 6px rgba(0, 0, 0, 0.6),
+    0 1px 2px rgba(0, 0, 0, 0.4);
+}
+
+.vintage-player.theme-light .vintage-player-screw::before {
+  background: rgba(0, 0, 0, 0.75);
+  box-shadow: 
+    0 -5px 0 rgba(0, 0, 0, 0.75),
+    0 1px 1px rgba(255, 255, 255, 0.15);
+}
+
+.vintage-player-screw-tl { top: 15px; left: 15px; }
+.vintage-player-screw-tr { top: 15px; right: 15px; }
+.vintage-player-screw-bl { bottom: 15px; left: 15px; }
+.vintage-player-screw-br { bottom: 15px; right: 15px; }
+
+/* Platter Rim (Recessed metallic base rim) */
+.vintage-player-vinyl-wrapper {
+  position: absolute;
+  top: 35px;
+  left: 30px;
+  width: 300px;
+  height: 300px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0;
+  border-radius: 50%;
+}
+
+.vintage-player.theme-dark .vintage-player-vinyl-wrapper {
+  background: radial-gradient(circle, #e4e4e7 50%, #a1a1aa 85%, #d1d1d6 98%, #71717a 100%);
+  border: 1.5px solid #a1a1aa;
+  box-shadow: 
+    0 15px 35px rgba(0, 0, 0, 0.25), 
+    0 5px 12px rgba(0, 0, 0, 0.15),
+    inset 0 3px 6px rgba(255, 255, 255, 0.5),
+    inset 0 -3px 6px rgba(0, 0, 0, 0.2);
+}
+
+.vintage-player.theme-light .vintage-player-vinyl-wrapper {
+  background: radial-gradient(circle, #2d3139 50%, #1c1c1f 85%, #3f434c 98%, #141416 100%);
+  border: 1.5px solid #141416;
+  box-shadow: 
+    0 18px 45px rgba(0, 0, 0, 0.55), 
+    0 8px 18px rgba(0, 0, 0, 0.4),
+    inset 0 3px 6px rgba(255, 255, 255, 0.1),
+    inset 0 -3px 6px rgba(0, 0, 0, 0.6);
+}
+
+/* Vinyl record */
+.vintage-player-vinyl {
+  position: relative;
+  width: 96%;
+  height: 96%;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.vintage-player.theme-dark .vintage-player-vinyl {
+  background: radial-gradient(circle at 30% 30%, #2a2a2d 0%, #1a1a1a 60%, #0d0d0d 100%);
+  box-shadow: 
+    0 6px 15px rgba(0, 0, 0, 0.25), 
+    inset 0 0 15px rgba(255, 255, 255, 0.05),
+    inset 0 -4px 10px rgba(0, 0, 0, 0.8);
+}
+
+.vintage-player.theme-light .vintage-player-vinyl {
+  background: radial-gradient(circle at 30% 30%, #ffffff 0%, #f2efeb 65%, #ded9d0 100%);
+  box-shadow: 
+    0 8px 20px rgba(0, 0, 0, 0.45), 
+    inset 0 0 15px rgba(255, 255, 255, 0.8),
+    inset 0 -4px 10px rgba(0, 0, 0, 0.05);
+}
+
+/* Grooves styled in light contrast on the dark-colored vinyl */
+.vintage-player-grooves {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+}
+
+.vintage-player.theme-dark .vintage-player-grooves {
+  background: repeating-radial-gradient(
+    circle at center,
+    transparent 0px,
+    transparent 2px,
+    rgba(255, 255, 255, 0.015) 2px,
+    rgba(255, 255, 255, 0.015) 4px
+  );
+  opacity: 0.95;
+}
+
+.vintage-player.theme-light .vintage-player-grooves {
+  background: repeating-radial-gradient(
+    circle at center,
+    transparent 0px,
+    transparent 2px,
+    rgba(0, 0, 0, 0.02) 2px,
+    rgba(0, 0, 0, 0.02) 4px
+  );
+  opacity: 0.95;
+}
+
+/* Gloss reflection overlay */
+.vintage-player-reflection {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  animation: vintagePlayerShimmer 12s linear infinite;
+  opacity: 0.65;
+  mix-blend-mode: overlay;
+}
+
+.vintage-player.theme-dark .vintage-player-reflection {
+  background: linear-gradient(
+    135deg,
+    transparent 20%,
+    rgba(255, 255, 255, 0.12) 40%,
+    transparent 60%
+  );
+}
+
+.vintage-player.theme-light .vintage-player-reflection {
+  background: linear-gradient(
+    135deg,
+    transparent 20%,
+    rgba(255, 255, 255, 0.35) 40%,
+    transparent 60%
+  );
+}
+
+@keyframes vintagePlayerShimmer {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Center Label with high contrast polished rim */
+.vintage-player-center-label {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 116px;
+  height: 116px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.vintage-player.theme-dark .vintage-player-center-label {
+  background: linear-gradient(135deg, #2a2a2a 0%, #1a1a1a 100%);
+  box-shadow: 
+    0 4px 15px rgba(0, 0, 0, 0.3),
+    inset 0 2px 4px rgba(255, 255, 255, 0.1),
+    inset 0 -2px 5px rgba(0, 0, 0, 0.5);
+  border: 1.5px solid #27272a;
+}
+
+.vintage-player.theme-light .vintage-player-center-label {
+  background: linear-gradient(135deg, #ffffff 0%, #fdfcf9 100%);
+  box-shadow: 
+    0 4px 15px rgba(0, 0, 0, 0.25),
+    inset 0 2px 4px rgba(255, 255, 255, 0.8),
+    inset 0 -2px 5px rgba(0, 0, 0, 0.08);
+  border: 1.5px solid #dcd8d0;
+}
+
+/* Album Art */
+.vintage-player-album-art {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.vintage-player.theme-dark .vintage-player-album-art {
+  box-shadow: 
+    0 3px 12px rgba(0, 0, 0, 0.4),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+}
+
+.vintage-player.theme-light .vintage-player-album-art {
+  box-shadow: 
+    0 3px 12px rgba(0, 0, 0, 0.2),
+    inset 0 0 0 1px rgba(0, 0, 0, 0.08);
+}
+
+.vintage-player-album-art img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.vintage-player.theme-dark .vintage-player-album-art img {
+  filter: contrast(1.1) brightness(0.9);
+}
+
+.vintage-player.theme-light .vintage-player-album-art img {
+  filter: contrast(1.05) brightness(0.98);
+}
+
+/* Chrome Metal Spindle */
+.vintage-player-spindle {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at 30% 30%, 
+    #ffffff 0%, 
+    #a1a1aa 50%, 
+    #52525b 90%,
+    #27272a 100%
+  );
+  box-shadow: 
+    2px 3px 6px rgba(0, 0, 0, 0.4),
+    inset 0 1px 2px rgba(255, 255, 255, 0.8);
+}
+
+/* Tonearm Wrapper (Placed in bottom right corner) */
+.vintage-player-tonearm-wrapper {
+  position: absolute;
+  right: 55px;
+  bottom: 55px;
+  width: 40px;
+  height: 40px;
+  transform: rotate(-75deg); /* Points arm up-right initially, off record */
+  z-index: 10;
+}
+
+.vintage-player-tonearm {
+  position: absolute;
+  left: 0;
+  top: -20px;
+  width: 200px;
+  height: 80px;
+  transform-origin: 20px 40px;
+  cursor: pointer;
+  transition: filter 0.3s ease;
+}
+
+.vintage-player.theme-dark .vintage-player-tonearm:hover {
+  filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.08));
+}
+
+.vintage-player.theme-light .vintage-player-tonearm:hover {
+  filter: drop-shadow(0 4px 10px rgba(255, 255, 255, 0.15));
+}
+
+/* Arm Base Button */
+.vintage-player-arm-base {
+  position: absolute;
+  left: 0;
+  top: 20px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+
+.vintage-player.theme-dark .vintage-player-arm-base {
+  background: radial-gradient(circle at 35% 35%, #3f3f46 0%, #1a1a1a 65%, #09090b 100%);
+  box-shadow: 
+    0 10px 20px rgba(0, 0, 0, 0.25),
+    0 3px 6px rgba(0, 0, 0, 0.15),
+    inset 0 2px 3px rgba(255, 255, 255, 0.05),
+    inset 0 -3px 5px rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.03);
+}
+
+.vintage-player.theme-light .vintage-player-arm-base {
+  background: radial-gradient(circle at 35% 35%, #ffffff 0%, #f2efeb 65%, #c8c3ba 100%);
+  box-shadow: 
+    0 10px 20px rgba(0, 0, 0, 0.45),
+    0 3px 6px rgba(0, 0, 0, 0.25),
+    inset 0 2px 3px #ffffff,
+    inset 0 -3px 5px rgba(0, 0, 0, 0.15);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+/* SVG Bent Arm Structure styles */
+.vintage-player-arm-structure {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 200px;
+  height: 80px;
+}
+
+.vintage-player-arm-svg {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.vintage-player.theme-dark .vintage-player-arm-svg {
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.25));
+}
+
+.vintage-player.theme-light .vintage-player-arm-svg {
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.5));
+}
+
+/* Metallic Joint cap */
+.vintage-player-arm-connector {
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+}
+
+.vintage-player.theme-dark .vintage-player-arm-connector {
+  background: radial-gradient(circle at 30% 30%, #52525b 0%, #27272a 60%, #09090b 100%);
+  box-shadow: 
+    0 3px 6px rgba(0, 0, 0, 0.4),
+    inset 0 1px 2px rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(0, 0, 0, 0.2);
+}
+
+.vintage-player.theme-light .vintage-player-arm-connector {
+  background: radial-gradient(circle at 30% 30%, #ffffff 0%, #f2efeb 60%, #beb9b0 100%);
+  box-shadow: 
+    0 3px 6px rgba(0, 0, 0, 0.35),
+    inset 0 1px 2px #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+/* Needle head/cartridge */
+.vintage-player-arm-head {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+}
+
+.vintage-player.theme-dark .vintage-player-arm-head {
+  background: linear-gradient(135deg, #2a2a2d 0%, #1a1a1a 60%, #0d0d0f 100%);
+  box-shadow: 
+    0 5px 10px rgba(0, 0, 0, 0.35),
+    inset 0 1px 2px rgba(255, 255, 255, 0.05);
+  border: 1px solid #27272a;
+}
+
+.vintage-player.theme-light .vintage-player-arm-head {
+  background: linear-gradient(135deg, #ffffff 0%, #f2efeb 60%, #d5d0c7 100%);
+  box-shadow: 
+    0 5px 10px rgba(0, 0, 0, 0.45),
+    inset 0 1px 2px #ffffff;
+  border: 1px solid #c8c3ba;
+}
+
+/* Knob Section (Placed in bottom left corner) */
+.vintage-player-knob-section {
+  position: absolute;
+  left: 55px;
+  bottom: 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Machined volume knob */
+.vintage-player-knob {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  cursor: grab;
+  transition: transform 0.2s ease;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.vintage-player.theme-dark .vintage-player-knob {
+  background: radial-gradient(
+    circle at 35% 35%, 
+    #3f3f46 0%, 
+    #1a1a1a 40%, 
+    #111113 75%,
+    #050506 100%
+  );
+  box-shadow: 
+    0 12px 25px rgba(0, 0, 0, 0.25), 
+    0 4px 8px rgba(0, 0, 0, 0.15),  
+    inset 0 2px 3px rgba(255, 255, 255, 0.05),
+    inset 0 -3px 5px rgba(0, 0, 0, 0.5);
+  border: 1.5px solid rgba(255, 255, 255, 0.03);
+}
+
+.vintage-player.theme-light .vintage-player-knob {
+  background: radial-gradient(
+    circle at 35% 35%, 
+    #ffffff 0%, 
+    #f2efeb 40%, 
+    #d1cdc7 75%,
+    #a6a198 100%
+  );
+  box-shadow: 
+    0 12px 25px rgba(0, 0, 0, 0.5), 
+    0 4px 8px rgba(0, 0, 0, 0.35),  
+    inset 0 2px 3px #ffffff,        
+    inset 0 -3px 5px rgba(0, 0, 0, 0.2); 
+  border: 1.5px solid rgba(0, 0, 0, 0.12);
+}
+
+.vintage-player-knob:hover {
+  transform: scale(1.04);
+}
+
+.vintage-player.theme-dark .vintage-player-knob:hover {
+  box-shadow: 
+    0 15px 30px rgba(0, 0, 0, 0.3),
+    0 6px 12px rgba(0, 0, 0, 0.2),
+    inset 0 2px 3px rgba(255, 255, 255, 0.05);
+}
+
+.vintage-player.theme-light .vintage-player-knob:hover {
+  box-shadow: 
+    0 15px 30px rgba(0, 0, 0, 0.55),
+    0 6px 12px rgba(0, 0, 0, 0.4),
+    inset 0 2px 3px #ffffff;
+}
+
+.vintage-player-knob:active {
+  cursor: grabbing;
+  transform: scale(0.97);
+}
+
+/* Concentric micro-machined texture circles inside the knob center */
+.vintage-player-knob-center {
+  position: relative;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.vintage-player.theme-dark .vintage-player-knob-center {
+  background: repeating-radial-gradient(
+    circle,
+    #2a2a2a 0px,
+    #2a2a2a 1px,
+    #1a1a1a 2px,
+    #111111 3px
+  ); 
+  border: 1px solid #27272a;
+  box-shadow: 
+    inset 0 2px 5px rgba(0, 0, 0, 0.35),
+    inset 0 -1.5px 2px rgba(255, 255, 255, 0.05),
+    0 1px 2px rgba(0, 0, 0, 0.15);
+}
+
+.vintage-player.theme-light .vintage-player-knob-center {
+  background: repeating-radial-gradient(
+    circle,
+    #ffffff 0px,
+    #ffffff 1px,
+    #f2efeb 2px,
+    #eae5df 3px,
+    #eae5df 4px
+  ); 
+  border: 1px solid #d1cdc7;
+  box-shadow: 
+    inset 0 2px 5px rgba(0, 0, 0, 0.15),
+    inset 0 -1.5px 2px rgba(255, 255, 255, 0.8),
+    0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+/* Machined pointer indicator */
+.vintage-player-knob-indicator {
+  position: absolute;
+  top: 5px;
+  width: 2px;
+  height: 11px;
+  border-radius: 1px;
+}
+
+.vintage-player.theme-dark .vintage-player-knob-indicator {
+  background: #f2efeb; /* sand pointer */
+  box-shadow: 
+    inset 0.5px 0.5px 1px rgba(255, 255, 255, 0.2),
+    0.5px 0.5px 0.5px rgba(0, 0, 0, 0.5);
+}
+
+.vintage-player.theme-light .vintage-player-knob-indicator {
+  background: #52525b; /* dark indicator slot */
+  box-shadow: 
+    inset 0.5px 0.5px 1px rgba(0, 0, 0, 0.4),
+    0.5px 0.5px 0.5px rgba(255, 255, 255, 0.8);
+}
+
+/* LED Power Indicator (Placed in bottom center) */
+.vintage-player-led-section {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 60px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Recessed metal socket bezel for the LED status light */
+.vintage-player-led {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.vintage-player.theme-dark .vintage-player-led {
+  background: #e4e4e7;
+  border: 2px solid #a1a1aa; /* silver bezel ring on light base */
+  box-shadow: 
+    inset 0 2px 4px rgba(0, 0, 0, 0.2),
+    0 1px 1.5px rgba(255, 255, 255, 0.8);
+}
+
+.vintage-player.theme-light .vintage-player-led {
+  background: #18181b;
+  border: 2px solid #52525b; /* recessed dark silver bezel */
+  box-shadow: 
+    inset 0 2px 4px rgba(0, 0, 0, 0.85),
+    0 1px 1.5px rgba(255, 255, 255, 0.06);
+}
+
+/* Glowing active state with real lens-flare light dispersion (Purple glow) */
+.vintage-player-led.active {
+  animation-duration: 2s;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+}
+
+.vintage-player.theme-dark .vintage-player-led.active {
+  background: radial-gradient(circle at 35% 35%, #ffffff 0%, #c084fc 40%, #8b5cf6 100%); /* light purple glow lens */
+  border-color: #d8b4fe;
+  box-shadow: 
+    inset 0 1px 2px rgba(255, 255, 255, 0.8),
+    0 0 4px rgba(139, 92, 246, 1),
+    0 0 15px rgba(139, 92, 246, 0.85),
+    0 0 30px rgba(139, 92, 246, 0.4);
+  animation-name: vintageDarkPulse;
+}
+
+.vintage-player.theme-light .vintage-player-led.active {
+  background: radial-gradient(circle at 35% 35%, #ffffff 0%, #a78bfa 40%, #7c3aed 100%); /* light purple glow lens */
+  border-color: #3f3f46;
+  box-shadow: 
+    inset 0 1px 2px rgba(255, 255, 255, 0.55),
+    0 0 4px rgba(124, 58, 237, 1),
+    0 0 15px rgba(124, 58, 237, 0.85),
+    0 0 30px rgba(124, 58, 237, 0.4);
+  animation-name: vintageLightPulse;
+}
+
+@keyframes vintageDarkPulse {
+  0%, 100% { 
+    opacity: 1; 
+    filter: drop-shadow(0 0 2px rgba(139, 92, 246, 0.4));
+  }
+  50% { 
+    opacity: 0.85; 
+    filter: drop-shadow(0 0 6px rgba(139, 92, 246, 0.8));
+  }
+}
+
+@keyframes vintageLightPulse {
+  0%, 100% { 
+    opacity: 1; 
+    filter: drop-shadow(0 0 2px rgba(124, 58, 237, 0.4));
+  }
+  50% { 
+    opacity: 0.85; 
+    filter: drop-shadow(0 0 6px rgba(124, 58, 237, 0.8));
+  }
+}

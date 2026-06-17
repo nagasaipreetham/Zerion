@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import VintageDarkPlayer from './vintage-dark/VintageDarkPlayer';
-import VintageLightPlayer from './vintage-light/VintageLightPlayer';
+import VintagePlayer from './vintage-player/VintagePlayer';
 import './PlayersSandbox.css';
 
 const PlayersSandbox = () => {
@@ -46,14 +45,14 @@ const PlayersSandbox = () => {
         {(viewMode === 'both' || viewMode === 'dark') && (
           <div className="sandbox-player-card dark-theme-card">
             <div className="card-badge">NOIR THEME</div>
-            <VintageDarkPlayer />
+            <VintagePlayer theme="dark" />
           </div>
         )}
 
         {(viewMode === 'both' || viewMode === 'light') && (
           <div className="sandbox-player-card light-theme-card">
             <div className="card-badge">CLASSIC THEME</div>
-            <VintageLightPlayer />
+            <VintagePlayer theme="light" />
           </div>
         )}
       </div>

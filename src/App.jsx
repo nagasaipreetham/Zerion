@@ -18,8 +18,7 @@ import SkillsScroll from './components/SkillsScroll';
 import Resume from './components/Resume';
 import SectionNavigator from './components/SectionNavigator';
 import PlayersSandbox from './components/PlayersSandbox';
-import VintageDarkPlayer from './components/vintage-dark/VintageDarkPlayer';
-import VintageLightPlayer from './components/vintage-light/VintageLightPlayer';
+import VintagePlayer from './components/vintage-player/VintagePlayer';
 import { useTheme } from './context/ThemeContext';
 
 // Register ScrollTrigger once at module level so Works.jsx can also rely on it
@@ -172,7 +171,7 @@ function App() {
                 <div id="footer">
                   <GitHubGraph />
                   <div className="portfolio-turntable-container">
-                    {theme === 'dark' ? <VintageDarkPlayer /> : <VintageLightPlayer />}
+                    <VintagePlayer theme={theme} />
                   </div>
                 </div>
 

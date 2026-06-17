@@ -1,8 +1,8 @@
 import { useState, useRef, useEffect } from 'react';
 import gsap from 'gsap';
-import './VintageDarkPlayer.css';
+import './VintagePlayer.css';
 
-const VintageDarkPlayer = () => {
+const VintagePlayer = ({ theme = 'dark' }) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [volume, setVolume] = useState(0.7);
   const [isDraggingKnob, setIsDraggingKnob] = useState(false);
@@ -14,25 +14,6 @@ const VintageDarkPlayer = () => {
   const rotationRef = useRef(null);
   const knobRef = useRef(null);
   const containerRef = useRef(null);
-
-  useEffect(() => {
-    const container = containerRef.current;
-    if (!container) return;
-
-    const resizeObserver = new ResizeObserver((entries) => {
-      for (let entry of entries) {
-        const width = entry.contentRect.width;
-        if (width < 380) {
-          setScale(width / 380);
-        } else {
-          setScale(1);
-        }
-      }
-    });
-
-    resizeObserver.observe(container);
-    return () => resizeObserver.disconnect();
-  }, []);
 
   useEffect(() => {
     if (audioRef.current) {
@@ -56,6 +37,25 @@ const VintageDarkPlayer = () => {
         rotationRef.current.kill();
       }
     };
+  }, []);
+
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+
+    const resizeObserver = new ResizeObserver((entries) => {
+      for (let entry of entries) {
+        const width = entry.contentRect.width;
+        if (width < 380) {
+          setScale(width / 380);
+        } else {
+          setScale(1);
+        }
+      }
+    });
+
+    resizeObserver.observe(container);
+    return () => resizeObserver.disconnect();
   }, []);
 
   const handleTonearmClick = () => {
@@ -135,95 +135,104 @@ const VintageDarkPlayer = () => {
   }, [isDraggingKnob]);
 
   return (
-    <div ref={containerRef} className="vintage-dark-player">
+    <div ref={containerRef} className={`vintage-player theme-${theme}`}>
       <div
-        className="vintage-dark-base-wrapper"
+        className="vintage-player-base-wrapper"
         style={{
           width: `${380 * scale}px`,
           height: `${480 * scale}px`,
         }}
       >
         <div
-          className="vintage-dark-base"
+          className="vintage-player-base"
           style={{
             transform: `scale(${scale})`,
-            transformOrigin: 'center center',
           }}
         >
           {/* Wood Texture Overlay */}
-          <div className="vintage-dark-wood-texture" />
+          <div className="vintage-player-wood-texture" />
 
           {/* Corner Screws */}
-          <div className="vintage-dark-screw vintage-dark-screw-tl" />
-          <div className="vintage-dark-screw vintage-dark-screw-tr" />
-          <div className="vintage-dark-screw vintage-dark-screw-bl" />
-          <div className="vintage-dark-screw vintage-dark-screw-br" />
+          <div className="vintage-player-screw vintage-player-screw-tl" />
+          <div className="vintage-player-screw vintage-player-screw-tr" />
+          <div className="vintage-player-screw vintage-player-screw-bl" />
+          <div className="vintage-player-screw vintage-player-screw-br" />
 
           {/* Vinyl Record */}
-          <div className="vintage-dark-vinyl-wrapper">
-            <div ref={vinylRef} className="vintage-dark-vinyl">
-              <div className="vintage-dark-grooves" />
-              <div className="vintage-dark-reflection" />
-              <div className="vintage-dark-center-label">
+          <div className="vintage-player-vinyl-wrapper">
+            <div ref={vinylRef} className="vintage-player-vinyl">
+              <div className="vintage-player-grooves" />
+              <div className="vintage-player-reflection" />
+              <div className="vintage-player-center-label">
                 {/* Album Art (Tilted to the right a little bit) */}
-                <div className="vintage-dark-album-art">
+                <div className="vintage-player-album-art">
                   <img
                     src="https://images.unsplash.com/photo-1487180144351-b8472da7d491?w=400&h=400&fit=crop"
                     alt="Album"
                   />
                 </div>
-                <div className="vintage-dark-spindle" />
+                <div className="vintage-player-spindle" />
               </div>
             </div>
           </div>
 
           {/* Tonearm Wrapper */}
-          <div className="vintage-dark-tonearm-wrapper">
+          <div className="vintage-player-tonearm-wrapper">
             <div
               ref={tonearmRef}
-              className="vintage-dark-tonearm"
+              className="vintage-player-tonearm"
               onClick={handleTonearmClick}
             >
-              <div className="vintage-dark-arm-base" />
-              <div className="vintage-dark-arm-structure">
-                <svg className="vintage-dark-arm-svg" width="300" height="80" viewBox="0 0 300 80">
+              <div className="vintage-player-arm-base" />
+              <div className="vintage-player-arm-structure">
+                <svg className="vintage-player-arm-svg" width="300" height="80" viewBox="0 0 300 80">
                   <defs>
-                    <linearGradient id="dark-pipe-grad" x1="0%" y1="0%" x2="100%" y2="100%">
-                      <stop offset="0%" stopColor="#f3f4f6" />
-                      <stop offset="50%" stopColor="#d1d5db" />
-                      <stop offset="100%" stopColor="#9ca3af" />
+                    <linearGradient id={`pipe-grad-${theme}`} x1="0%" y1="0%" x2="100%" y2="100%">
+                      {theme === 'dark' ? (
+                        <>
+                          <stop offset="0%" stopColor="#f3f4f6" />
+                          <stop offset="50%" stopColor="#d1d5db" />
+                          <stop offset="100%" stopColor="#9ca3af" />
+                        </>
+                      ) : (
+                        <>
+                          <stop offset="0%" stopColor="#d1d5db" />
+                          <stop offset="50%" stopColor="#9ca3af" />
+                          <stop offset="100%" stopColor="#4b5563" />
+                        </>
+                      )}
                     </linearGradient>
                   </defs>
                   <path 
                     d="M 20,40 L 155,40 L 270,12" 
                     fill="none" 
-                    stroke="url(#dark-pipe-grad)" 
+                    stroke={`url(#pipe-grad-${theme})`} 
                     strokeWidth="5" 
                     strokeLinecap="round"
                     strokeLinejoin="round"
                   />
                 </svg>
-                <div className="vintage-dark-arm-connector" style={{ left: '11px', top: '31px' }} />
-                <div className="vintage-dark-arm-head" style={{ left: '260px', top: '2px' }} />
+                <div className="vintage-player-arm-connector" style={{ left: '11px', top: '31px' }} />
+                <div className="vintage-player-arm-head" style={{ left: '260px', top: '2px' }} />
               </div>
             </div>
           </div>
 
           {/* Control Panel elements positioned directly */}
-          <div className="vintage-dark-knob-section">
+          <div className="vintage-player-knob-section">
             <div
               ref={knobRef}
-              className="vintage-dark-knob"
+              className="vintage-player-knob"
               onMouseDown={handleKnobMouseDown}
             >
-              <div className="vintage-dark-knob-center">
-                <div className="vintage-dark-knob-indicator" />
+              <div className="vintage-player-knob-center">
+                <div className="vintage-player-knob-indicator" />
               </div>
             </div>
           </div>
 
-          <div className="vintage-dark-led-section">
-            <div className={`vintage-dark-led ${isPlaying ? 'active' : ''}`} />
+          <div className="vintage-player-led-section">
+            <div className={`vintage-player-led ${isPlaying ? 'active' : ''}`} />
           </div>
         </div>
       </div>
@@ -237,4 +246,4 @@ const VintageDarkPlayer = () => {
   );
 };
 
-export default VintageDarkPlayer;
+export default VintagePlayer;
