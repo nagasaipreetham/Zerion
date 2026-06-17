@@ -17,7 +17,6 @@ import GitHubGraph from './components/GitHubGraph';
 import SkillsScroll from './components/SkillsScroll';
 import Resume from './components/Resume';
 import SectionNavigator from './components/SectionNavigator';
-import PlayersSandbox from './components/PlayersSandbox';
 import VintagePlayer from './components/vintage-player/VintagePlayer';
 import { useTheme } from './context/ThemeContext';
 
@@ -206,8 +205,6 @@ function App() {
           </div>
         } />
 
-        {/* Sandbox Route */}
-        <Route path="/sandbox" element={<PlayersSandbox />} />
       </Routes>
     </>
   );

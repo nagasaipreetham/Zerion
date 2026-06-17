@@ -66,10 +66,10 @@ export default function Sponsorship() {
           </div>
 
           <div className="sponsor-socials">
-            <a href="https://x.com/neetcode" target="_blank" rel="noopener noreferrer" className="sponsor-social-link">
+            <a href="https://x.com/neetcode1" target="_blank" rel="noopener noreferrer" className="sponsor-social-link">
               <img src={xIcon} alt="X" className="sponsor-social-img" />
             </a>
-            <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="sponsor-social-link">
+            <a href="https://www.linkedin.com/in/navdeep-singh-3aaa14161/" target="_blank" rel="noopener noreferrer" className="sponsor-social-link">
               <img src={linkedinIcon} alt="LinkedIn" className="sponsor-social-img" />
             </a>
             <a href="https://github.com/neetcode-gh" target="_blank" rel="noopener noreferrer" className="sponsor-social-link">

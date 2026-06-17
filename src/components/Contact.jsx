@@ -13,7 +13,7 @@ export default function Contact() {
 
         {/* Hover trigger container for email address & send a message button */}
         <div className="contact-email-trigger">
-          <a href="mailto:nagasaipreetham@gmail.com" className="contact-email">
+          <a href="https://mail.google.com/mail/?view=cm&fs=1&to=nagasaipreetham@gmail.com" target="_blank" rel="noopener noreferrer" className="contact-email">
             <span className="email-user">nagasaipreetham</span>
             <span className="email-domain">@gmail.com</span>
           </a>
@@ -23,7 +23,7 @@ export default function Contact() {
             <div className="email-underline"></div>
           </div>
 
-          <a href="mailto:nagasaipreetham@gmail.com" className="contact-message-link">
+          <a href="https://mail.google.com/mail/?view=cm&fs=1&to=nagasaipreetham@gmail.com" target="_blank" rel="noopener noreferrer" className="contact-message-link">
             SEND A MESSAGE <span className="arrow">↗</span>
           </a>
         </div>
@@ -35,22 +35,19 @@ export default function Contact() {
 
         {/* Center links grid (wrapped & centered) */}
         <div className="social-links-grid">
-          <a href="https://x.com" target="_blank" rel="noopener noreferrer" className="social-link">
+          <a href="https://x.com/MaddulaPreetham" target="_blank" rel="noopener noreferrer" className="social-link">
             X
           </a>
-          <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="social-link">
+          <a href="https://www.linkedin.com/in/nagasaipreetham/" target="_blank" rel="noopener noreferrer" className="social-link">
             LINKEDIN
           </a>
-          <a href="mailto:nagasaipreetham@gmail.com" className="social-link">
-            EMAIL
-          </a>
-          <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="social-link">
+          <a href="https://www.instagram.com/preetham_0405?igsh=MWtseHFwMW1oNWhhMA==" target="_blank" rel="noopener noreferrer" className="social-link">
             INSTAGRAM
           </a>
-          <a href="https://discord.gg" target="_blank" rel="noopener noreferrer" className="social-link">
+          <a href="https://discordapp.com/users/preetham.dev" target="_blank" rel="noopener noreferrer" className="social-link">
             DISCORD
           </a>
-          <a href="https://github.com" target="_blank" rel="noopener noreferrer" className="social-link">
+          <a href="https://github.com/nagasaipreetham" target="_blank" rel="noopener noreferrer" className="social-link">
             GITHUB
           </a>
         </div>
