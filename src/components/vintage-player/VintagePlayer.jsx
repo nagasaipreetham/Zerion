@@ -3,7 +3,7 @@ import gsap from 'gsap';
 import './VintagePlayer.css';
 
 const VintagePlayer = ({ theme = 'dark' }) => {
-  const [isPlaying, setIsPlaying] = useState(true);
+  const [isPlaying, setIsPlaying] = useState(false);
   const [volume, setVolume] = useState(0.7);
   const [isDraggingKnob, setIsDraggingKnob] = useState(false);
   const [scale, setScale] = useState(1);
@@ -23,11 +23,11 @@ const VintagePlayer = ({ theme = 'dark' }) => {
     }
   }, [volume]);
 
-  // Initial load: Set initial tonearm angle, attempt play, and register user gesture listeners for autoplay bypass
+  // Initial load: Set initial tonearm angle (off disk) and volume knob position
   useEffect(() => {
-    // 1. Force the tonearm to be on the disk instantly by default on mount
+    // 1. Tonearm starts off the disk (rotation: 0) — user must click to play
     if (tonearmRef.current) {
-      gsap.set(tonearmRef.current, { rotation: -15 });
+      gsap.set(tonearmRef.current, { rotation: 0 });
     }
 
     // 2. Set the volume knob rotation initially based on default volume state (0.7)
@@ -35,51 +35,6 @@ const VintagePlayer = ({ theme = 'dark' }) => {
       const initialRotation = 0.7 * (324 - 36) + 36;
       gsap.set(knobRef.current, { rotation: initialRotation });
     }
-
-    const audio = audioRef.current;
-    if (!audio) return;
-
-    let interactionListenersRegistered = false;
-
-    const startAudioOnInteraction = () => {
-      if (audio.paused) {
-        audio.play()
-          .then(() => {
-            removeInteractionListeners();
-          })
-          .catch((err) => {
-            console.warn("Playback failed on interaction:", err);
-          });
-      } else {
-        removeInteractionListeners();
-      }
-    };
-
-    const removeInteractionListeners = () => {
-      if (interactionListenersRegistered) {
-        window.removeEventListener('click', startAudioOnInteraction);
-        window.removeEventListener('keydown', startAudioOnInteraction);
-        window.removeEventListener('touchstart', startAudioOnInteraction);
-        window.removeEventListener('mousedown', startAudioOnInteraction);
-        interactionListenersRegistered = false;
-      }
-    };
-
-    // Try playing immediately on load
-    audio.play()
-      .catch((err) => {
-        console.warn("Initial autoplay blocked. Registering interaction listeners...", err);
-        // Fallback: play on first click, keypress, touch, or mouse press
-        window.addEventListener('click', startAudioOnInteraction);
-        window.addEventListener('keydown', startAudioOnInteraction);
-        window.addEventListener('touchstart', startAudioOnInteraction);
-        window.addEventListener('mousedown', startAudioOnInteraction);
-        interactionListenersRegistered = true;
-      });
-
-    return () => {
-      removeInteractionListeners();
-    };
   }, []);
 
   // Vinyl continuous rotation layout initialization
