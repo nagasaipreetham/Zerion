@@ -35,6 +35,13 @@
   opacity: 0.9;
   margin-bottom: 24px;
   width: fit-content;
+  /* Light mode: pill sits on page background so it reads cleanly */
+  background-color: var(--bg-color);
+}
+
+/* Dark mode: keep the pill transparent */
+.dark .available-pill {
+  background-color: transparent;
 }
 
 .glowing-dot {

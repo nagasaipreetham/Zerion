@@ -20,6 +20,7 @@ import SectionNavigator from './components/SectionNavigator';
 import FloatingBottomMenu from './components/FloatingBottomMenu';
 import VintagePlayer from './components/vintage-player/VintagePlayer';
 import StarEffect from './components/StarEffect';
+import Clouds from './components/Clouds';
 import { useTheme } from './context/ThemeContext';
 
 // Register ScrollTrigger once at module level so Works.jsx can also rely on it
@@ -106,8 +107,13 @@ function App() {
             {/* ── Constrained centre column (existing sections) ─────── */}
             <div className="layout-container">
               <div className="hero-banner-wrapper">
-                <img src="/banner.png" alt="Hero background" className="hero-banner-img" />
+                {/* Banner image + stars: dark mode only */}
+                {theme === 'dark' && (
+                  <img src="/banner.png" alt="Hero background" className="hero-banner-img" />
+                )}
                 {theme === 'dark' && <StarEffect />}
+                {/* Halftone dotted clouds: light mode only */}
+                {theme === 'light' && <Clouds />}
                 <div className="hero-banner-fade"></div>
               </div>
 
