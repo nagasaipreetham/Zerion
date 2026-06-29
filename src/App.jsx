@@ -21,6 +21,7 @@ import FloatingBottomMenu from './components/FloatingBottomMenu';
 import VintagePlayer from './components/vintage-player/VintagePlayer';
 import StarEffect from './components/StarEffect';
 import Clouds from './components/Clouds';
+import Birds from './components/Birds';
 import { useTheme } from './context/ThemeContext';
 
 // Register ScrollTrigger once at module level so Works.jsx can also rely on it
@@ -112,8 +113,9 @@ function App() {
                   <img src="/banner.png" alt="Hero background" className="hero-banner-img" />
                 )}
                 {theme === 'dark' && <StarEffect />}
-                {/* Halftone dotted clouds: light mode only */}
+                {/* Halftone dotted clouds + flying birds: light mode only */}
                 {theme === 'light' && <Clouds />}
+                {theme === 'light' && <Birds />}
                 <div className="hero-banner-fade"></div>
               </div>
 
